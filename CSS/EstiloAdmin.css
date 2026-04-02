@@ -1,0 +1,11 @@
+/* es para darle diseno a los botones a */
+.sidebar a{
+    color: white;
+    text-decoration: none;
+    padding: 12px 20px;
+    font-size: 15px;
+}
+/* este para darle efecto al pasar por los a*/
+.sidebar a:hover{
+    background-color: rgba(255,255,255, 0.1);
+}
