@@ -43,7 +43,7 @@ require_once '../Conexion/Conexion.php';
                             echo "<td>" . $fila['producto'] . "</td>";
                             echo "<td>" . $fila['unidad'] . "</td>";
                             echo "<td>" . $fila['valor'] . "</td>";
-                            echo "<td><button class='btn btn-warning btn-sm'>Editar</button></tr>";
+                            echo "<td><a href='EditarP.php?id=" . $fila['id'] . "' class='btn btn-warning btn-sm'>Editar</a></td>";
                             echo "</tr>";
                         }                      
                         ?>

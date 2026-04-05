@@ -1,3 +1,6 @@
+<?php
+require_once '../Conexion/Conexion.php';
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -30,9 +33,24 @@
                         <th>Puesto</th>
                     </tr>
                 </thead>
+                    <tbody>
+                        <?php
+                        // qui hago la consulta para la tabla
+                        $sql = $Connection->query("SELECT * from trabajadores");
+                        // aqui lo convierto en arreglos para las comunas con el fetch_assoc
+                        while($fila = $sql->fetch_assoc()){
+                            echo "<tr>";
+                            echo "<td>" . $fila['nombre'] . "</td>";
+                            echo "<td>" . $fila['estado'] . "</td>";
+                            echo "<td><a href='EditarT.php?id_t=" . $fila['id_t'] . "' class='btn btn-warning btn-sm'>Editar</a></td>";
+                            echo "<td>" . $fila['puesto'] . "</td>";
+                            echo "</tr>";
+                        }                      
+                        ?>
+                    </tbody>
             </table>
             <div class="container mt-3 text-center">
-                <button class="btn btn-primary px-5" data-bs-toggle="modal" data-bs-target="#modalt">Añadir Trabajador</button>
+                <button class="btn btn-primary px-5" data-bs-toggle="modal" data-bs-target="#modalt">Añadir Producto</button>
             </div>
             <div class="modal fade" id="modalt" tabindex="-1" aria-labelledby="modalt" aria-hidden="true">
             <div class="modal-dialog">
@@ -42,30 +60,33 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="#" method="post"></form>
+                    <form action="../PHP/GuardarT.php" method="post" id="form">
                         <div class="mb-3">
-                            <label for="nombre" class="form-label">Nombre</label>
-                            <input type="text" class="form-control" id="nombre" name="nombre" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="nombre" class="form-label">Nombre</label>
-                            <input type="text" class="form-control" id="nombre" name="nombre" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="nombre" class="form-label">Nombre</label>
-                            <input type="text" class="form-control" id="nombre" name="nombre" required>
+                            <label for="nombre" class="form-label">Nombre del Trabajador</label>
+                            <input type="text" class="form-control" id="nombre" name="nombre" required placeholder="Introduce el nombre del trabajador Completo">
                         </div>
                         <div class="md-form mb-4">
-                            <select name="" id="">
-                            <option value="">Estatus</option>
-                            <option value="">Activo</option>
-                            <option value="">Inativo</option>
+                            <label for="estado" class="form-label">Estado</label>
+                            <select class="form-select" name="estado" id="estado " required>
+                            <option value="Activo">Activo</option>
+                            <option value="Inativo">Inativo</option>
                             </select>
                         </div>
+                         <div class="md-form mb-4">
+                            <label for="puesto" class="form-label">Puesto</label>
+                            <select class="form-select" name="puesto" id="puesto " required>
+                            <option value="">Ingresar el puesto</option>
+                            <option value="a">Activo</option>
+                            <option value="b">Inativo</option>
+                            </select>
+                        </div>
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Salir</button>
-                    <button type="button" class="btn btn-primary">Guardar</button>
+                    <!-- uso el tipo submit para que envie el formulario -->
+                    <button type="submit" form="form" class="btn btn-primary">Guardar</button>
+                    
                 </div>
                 </div>
             </div>
