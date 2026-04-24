@@ -12,12 +12,13 @@ require_once '../Conexion/Conexion.php';
     <link rel="stylesheet" href="../CSS/EstiloAdmin.css">
 </head>
 <body>
+    
     <div class="d-flex">
         <div class="sidebar d-flex flex-column bg-dark" style="width: 200px; height: 100vh;">
             <div Class="text-white p-3 border-bottom border-secondary fw-bold">NADA</div>
             <a href="Admin.php">Gestionar Trabajadores</Tr></a>
             <a href="Gestion_Usua.php">Gestionar Usuarios</a>
-            <a href="#">Gestionar Campos</a>
+            <a href="Gestion_Camp.php">Gestionar Campos</a>
             <a href="Productos.php">Configurar Valores y Productos</a>
             <a href="#">Reportes Generales</a>
             <a href="#">Historial de Resgistro</a>
@@ -77,6 +78,7 @@ require_once '../Conexion/Conexion.php';
                         <div class="md-form mb-4">
                             <label for="id_producto" class="form-label">Producto</label>
                             <select class="form-select" name="id_producto" id="id_producto" required>
+
                             <?php
                             // aqui hago la consulta para mostrar los productos en el select del modal para que el admin pueda elegir el producto que va a tener el campo
                             $sqlproducto = $Connection->query("SELECT * FROM producto");

@@ -14,8 +14,8 @@
             <div Class="text-white p-3 border-bottom border-secondary fw-bold">NADA</div>
             <a href="Admin.php">Gestionar Trabajadores</Tr></a>
             <a href="Gestion_Usua.php">Gestionar Usuarios</a>
-            <a href="#">Gestionar Campos</a>
-            <a href="#">Configurar Valores y Productos</a>
+            <a href="Gestion_Camp.php">Gestionar Campos</a>
+            <a href="Productos.php">Configurar Valores y Productos</a>
             <a href="#">Reportes Generales</a>
             <a href="#">Historial de Resgistro</a>
         </div>
