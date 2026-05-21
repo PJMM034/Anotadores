@@ -1,5 +1,8 @@
 <?php
-require_once '../Conexion/Conexion.php';
+session_start();
+require_once '../logins/check.php';
+//mando a llamar la funcion para validar el inicio de sesion
+require_role('ADMIN');
 
 $queryA = "SELECT * FROM producto";
 $resultA = $Connection->query($queryA);

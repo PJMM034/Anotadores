@@ -1,3 +1,19 @@
+<?php
+// Obtiene el valor del parámetro 'error' de la URL, o asigna una cadena vacía si no está presente.
+$error = $_GET['error'] ?? '';
+if  ($error === '1') {
+    // Si el error es '1', muestra un mensaje de alerta indicando que el usuario o la contraseña son incorrectos.
+    echo '<div class="alert alert-danger text-center" role="alert">
+    Usuario o contraseña incorrectos.</div>';
+} if ($error === '2') {
+    echo '<div class="alert alert-warning text-center" role="alert">
+    Error al iniciar sesión.</div>';
+} if ($error === '3') {
+    echo '<div class="alert alert-warning text-center" role="alert">
+    Error, no tiene permisos.</div>';
+}
+
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -13,7 +29,7 @@
             <div class="col-12 col-md-7 col-lg-5">
                 <div class="card border-0 shadow-sm">
                     <div class="card-body p-4 p-md-5">
-                     <form action="PHP/Login/login.php" method="post">
+                     <form action="logins/login.php" method="post">
                           <div class="mb-3">
                             <label class="form-label" for="usuario">Usuario</label>
                             <input class="form-control" type="text" id="usuario" name="usuario" required placeholder="Introduce tu Usuario">
