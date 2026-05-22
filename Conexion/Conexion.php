@@ -1,9 +1,9 @@
 <?php
 $Hostname = "localhost";
 $User = "root";
-$Pass = "Ramirez034";
+$Pass = "victorteran";
 $DB = "anotadores";
-$Connection = new mysqli($Hostname,$User,$Pass,$DB,3306);
+$Connection = new mysqli($Hostname,$User,$Pass,$DB);
 
 if ($Connection->connect_errno) {
 	echo "Error";
