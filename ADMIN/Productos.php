@@ -206,7 +206,7 @@ $resultA = $Connection->query($queryA);
                                 </div>
                                 <div class="mb-3">
                                     <label for="edit-valor" class="form-label">Valor por Unidad</label>
-                                    <input type="text" class="form-control" id="edit-valor" name="valor" required placeholder="Ingresar Precio">
+                                    <input type="text" class="form-control" id="edit-valor" name="valor" required placeholder="Ingresar Precio" readonly>
                                 </div>
                             </div>
                             <div class="modal-footer">
