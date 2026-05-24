@@ -257,7 +257,7 @@ body {
     -webkit-backdrop-filter: blur(10px);
     font-size: 16px;
     box-shadow: 0 0 20px rgb(255, 0, 0);
-    treansition: background-color 0.3s ease-in-out;
+    transition: background-color 0.3s ease-in-out;
 }
 
 /*Efecto al presionar los botones de salir*/
