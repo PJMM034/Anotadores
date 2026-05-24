@@ -1,13 +1,15 @@
 /* es para darle diseno a los botones a */
 .sidebar a{
-    color: white;
+    color: rgb(13, 54, 5);
     text-decoration: none;
+    font-family: 'excalibur', cursive;
     padding: 12px 20px;
     font-size: 15px;
 }
 /* este para darle efecto al pasar por los a*/
 .sidebar a:hover{
     background-color: rgba(255,255,255, 0.1);
+    font-family: 'excalibur', cursive;
 }
 
 .container a{
@@ -18,6 +20,73 @@
     align-items:center;
 }
 
+
+/*Diseño transparentoso tipo vidrio que me recuerda a las paginas de antes de la barra lateral*/
+.vidrio-sidebar {
+    background: rgba(245, 252, 229, 0.195) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+
+    box-shadow: 1px 1px 1px rgba(193, 240, 190, 0.7) !important;
+
+    border: 1px solid rgba(193, 240, 190, 0.7) !important;
+    border-radius: 10px !important;
+}
+
+/*El texto que esta en la parte superiro de la barra lateral*/
+.textobarsup {
+    color: rgb(15, 33, 2) !important;
+    font-family: 'excalibur', cursive !important;
+    font-size: 25px;
+}
+
+/*Texto de la barra lateral*/
+.textobar {
+    color: rgb(15, 33, 2) !important;
+    font-family: 'excalibur', cursive !important;
+    transition: background-color 0.3s ease-in-out;
+    transition: font-size 0.3s ease-in-out;
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+/*Texto de la barra lateral al pasar el mouse*/
+.textobar:hover {
+    background-color: rgba(33, 237, 255, 0.5) !important;
+    font-family: 'excalibur', cursive !important;
+    font-size: 16px;
+    box-shadow: 0 0 10px #21edff;
+    padding: 12px 20px;
+    transition: background-color 0.3s ease-in-out;
+    transition: font-size 0.3s ease-in-out;
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+/*Este es para darle un efecto y color diferente al boton de cerrar sesion de la barra*/
+.a-barra-salir {
+    background-color: rgba(255, 33, 33, 0.289);
+    color: rgb(251, 249, 255);
+    font-family: 'excalibur', cursive;
+    font-size: 16px;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    border: none;
+    transition: background-color 0.3s ease-in-out;
+    transition: font-size 0.3s ease-in-out;
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+/* este es para darle efecto al boton de cerrar sesion de la barra al pasar el mouse*/
+.a-barra-salir:hover {
+    background-color: rgba(255, 0, 30, 0.5) !important;
+    color: rgb(85, 9, 9);
+    font-size: 16px;
+    box-shadow: 0 0 10px rgb(255, 0, 30);
+    padding: 10px 20px;
+    transition: background-color 0.3s ease-in-out;
+}
+
+/*Fondo de la pagina y demas decoraciones*/
 body {
     background-image: url("../Imagenes/fondo.jpg");
     background-repeat: no-repeat;
@@ -27,6 +96,177 @@ body {
     height: 100vh;
 }
 
-.tr {
-    background-color: rgb(255, 33, 33);
+/*Responsable del diseño de las tablas*/
+.tabla-transparente td {
+    /* Usamos RGBA para mantener la semitransparencia del efecto cristal */
+    background-color: rgba(255, 255, 255, 0.2) !important; 
+    padding: 12px 15px !important;
+    vertical-align: middle;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
+    transition: background-color 0.3s ease;
+}
+
+
+/*El diseño de la cabeza de las tablas*/
+.tabla-transparente thead th {
+    background-color: rgba(0, 0, 0, 0.3) !important; /* Encabezados un poco más visibles */
+    color: rgb(250, 255, 246) !important;
+    font-family: 'excalibur', cursive !important;
+    font-size: 16px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+
+/* Cambia el color de la fila cuando el cursor está encima */
+.tabla-transparente tbody tr:hover td {
+    background-color: rgba(255, 255, 255, 0.6) !important; /* Se ilumina más fuerte */
+    transition: background-color 0.3s ease;
+}
+
+/*Para colorear las filas pares*/
+.tabla-transparente tbody tr:nth-child(even) td {
+    background-color: rgba(255, 255, 255, 0.063) !important; /* Filas pares más transparentes */
+}
+
+/*Para colorear las filas pares al pasar el mouse*/
+.tabla-transparente tbody tr:nth-child(even):hover td {
+    background-color: rgba(255, 252, 252, 0.471) !important; /* Filas pares más transparentes */
+}
+
+/*Para colorear las filas pares al hacer clic*/
+.tabla-transparente tbody tr:nth-child(even):active td {
+    background-color: rgba(193, 240, 190, 0.7) !important; /* Filas pares más transparentes */
+}
+
+/*Para colorear las filas cuando se hace clic*/
+.tabla-transparente tbody tr:active td {
+    background-color: rgba(193, 240, 190, 0.7) !important;
+    transition: background-color 0.3s ease;
+}
+
+
+/*Esto es el diseño de los botones principales como loggin, registrar cortador, registrar productos y derivados, de aqui salen las demas variables*/
+.pulse-effect {
+    border: none;
+    color: rgb(255, 255, 255);
+    font-family: 'excalibur', cursive;
+    font-size: 16px;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    background-color: rgba(3, 255, 49, 0.2);
+    transition: background-color 0.3s ease-in-out;
+    backdrop-filter: blur(5px);
+}
+
+/*Efecto de los botones al pasar el mouse por encima*/
+.pulse-effect:hover {
+    background-color: rgb(111, 255, 0, 0.5);
+    backdrop-filter: blur(10px);
+    color: rgb(255, 255, 255);
+    font-size: 16px;
+    box-shadow: 0 0 10px rgb(111, 255, 0);
+    padding: 10px 20px;
+    transition: background-color 0.3s ease-in-out;
+    
+}
+
+/*Efecto de los botones al presionarlo*/
+.pulse-effect:active {
+    transform: scale(0.95);
+    background-color: rgba(255, 255, 255, 0.9) !important; 
+    backdrop-filter: blur(15px);
+    color: rgb(34, 255, 0) !important;
+    font-size: 16px;
+    padding: 10px 20px;
+    box-shadow: 0 0 10px rgb(255, 255, 255) !important;
+    max-width: 500px;
+    transition: background-color 0.3s ease-in-out;
+}
+
+/*Efecto para los botones de salir siguiendo la logica de los otros botones*/
+.btn-salir {
+    background-color: rgba(255, 33, 33, 0.289);
+    color: rgb(255, 255, 255);
+    font-family: 'excalibur', cursive;
+    font-size: 16px;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    border: none;
+    transition: background-color 0.3s ease-in-out;
+}
+
+/*Efecto al pasar el mouse por los botones de salir*/
+.btn-salir:hover {
+    background-color: rgb(255, 0, 0, 0.5);
+    color: rgb(255, 255, 255);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    font-size: 16px;
+    box-shadow: 0 0 20px rgb(255, 0, 0);
+    padding: 10px 20px;
+}
+
+/*Efecto al presionar los botones de salir*/
+.btn-salir:active {
+    transform: scale(0.95);
+    background-color: rgba(255, 255, 255, 0.9) !important; 
+    color: rgb(255, 0, 0) !important;
+    font-size: 16px;
+    padding: 10px 20px;
+    box-shadow: 0 0 10px rgb(255, 255, 255);
+    transition: background-color 0.3s ease-in-out;
+    
+}
+
+/*Modal transparentosa estilo vidrio*/
+.modal-vidrio {
+    background: rgba(245, 252, 229, 0.195);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    box-shadow: 1px 1px 1px rgba(193, 240, 190, 0.7);
+
+    border: 1px solid rgba(193, 240, 190, 0.7);
+    border-radius: 10px;
+
+    padding: 20px;
+    max-width: 500px;
+    color: #fff;
+    text-align: center;
+}
+
+.equis {
+    background-color: rgba(255, 33, 33, 0.289);
+    color: rgb(255, 255, 255);
+    font-family: 'excalibur', cursive;
+    font-size: 16px;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    border: none;
+    transition: background-color 0.3s ease-in-out;
+}
+
+/*Efecto al pasar el mouse por los botones de salir*/
+.equis:hover {
+    background-color: rgb(255, 0, 0, 0.5);
+    color: rgb(255, 255, 255);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    font-size: 16px;
+    box-shadow: 0 0 20px rgb(255, 0, 0);
+    treansition: background-color 0.3s ease-in-out;
+}
+
+/*Efecto al presionar los botones de salir*/
+.equis:active {
+    transform: scale(0.95);
+    background-color: rgba(255, 255, 255, 0.9) !important; 
+    color: rgb(255, 0, 0) !important;
+    font-size: 16px;
+    box-shadow: 0 0 10px rgb(255, 255, 255);
+    transition: background-color 0.3s ease-in-out;
+    
 }
