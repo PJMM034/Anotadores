@@ -1,3 +1,19 @@
+<?php
+// Obtiene el valor del parámetro 'error' de la URL, o asigna una cadena vacía si no está presente.
+$error = $_GET['error'] ?? '';
+if  ($error === '1') {
+    // Si el error es '1', muestra un mensaje de alerta indicando que el usuario o la contraseña son incorrectos.
+    echo '<div class="alert alert-danger text-center" role="alert">
+    Usuario o contraseña incorrectos.</div>';
+} if ($error === '2') {
+    echo '<div class="alert alert-warning text-center" role="alert">
+    Error al iniciar sesión.</div>';
+} if ($error === '3') {
+    echo '<div class="alert alert-warning text-center" role="alert">
+    Error, no tiene permisos.</div>';
+}
+
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -6,14 +22,15 @@
     <title>---LOGIN---</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="CSS/login.css">
 </head>
 <body class="hg-light">
     <main class="container py-5">
         <div class="row justify-content-center">
             <div class="col-12 col-md-7 col-lg-5">
-                <div class="card border-0 shadow-sm">
+                <div class="card contenedorlogin border-0 shadow-sm">
                     <div class="card-body p-4 p-md-5">
-                     <form action="PHP/Login/login.php" method="post">
+                     <form action="logins/login.php" method="post">
                           <div class="mb-3">
                             <label class="form-label" for="usuario">Usuario</label>
                             <input class="form-control" type="text" id="usuario" name="usuario" required placeholder="Introduce tu Usuario">
@@ -23,10 +40,10 @@
                             <input class="form-control" type="password" id="password" name="password" required placeholder="Introduce tu Contraseña">
                           </div>
                           <div class="d-grid gap-2 text-center">
-                             <button  class="btn btn-outline-primary" type="submit">Iniciar Sesión</button>
+                             <button  class="btn btn-login" type="submit">Iniciar Sesión</button>
                           </div>
-                          <p class="text-center text-secondary mt-3 mb-0 small">
-                          para efecto de pruwba no se validad usuarios ni contraseñas
+                          <p class="textinf text-center">
+                          para efecto de prueba no se validad usuarios ni contraseñas
                         </p>
                      </form>
                     </div>

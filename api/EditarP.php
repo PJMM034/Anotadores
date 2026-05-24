@@ -2,9 +2,9 @@
 require_once "../Conexion/Conexion.php";
 
 $id = (int)($_POST['id'] ?? 0);
-$producto  = trim($_POST['producto']  ?? '');
+$producto  = trim($_POST['producto'] ?? '');
 $unidad = trim($_POST['unidad'] ?? '');
-$valor      = trim($_POST['valor']      ?? '');
+$valor = trim($_POST['valor'] ?? '');
 
 if ($id <= 0 || $producto == '' || $unidad == '' || $valor == '') {
     echo json_encode(['ok' => false, 'msg' => 'Datos inválidos']);

@@ -1,5 +1,9 @@
 <?php
-require_once '../Conexion/Conexion.php';
+session_start();
+require_once '../logins/check.php';
+//mando a llamar la funcion para validar el inicio de sesion
+require_role('ADMIN');
+
 
 $queryA = "SELECT * FROM campos";
 $resultA = $Connection->query($queryA);
@@ -11,11 +15,14 @@ $resultA = $Connection->query($queryA);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ADMIN</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="../CSS/EstiloAdmin.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <script src="../js/jquery-4.0.0.js"></script>
+
+
 <script>
       
       $(document).ready(function(){
@@ -29,8 +36,9 @@ $resultA = $Connection->query($queryA);
                 </div>
                 `);
 
-            } 
+            }
 
+            
             function cargaCampos(){
                 $.getJSON ("../api/ListC.php", function(resp){
                     // Procesar los datos recibidos
@@ -46,19 +54,48 @@ $resultA = $Connection->query($queryA);
                             <td>${s.tipo}</td>
                             <td>${s.numero}</td>
                             <td>${s.estado}</td>
+                       
+                           <td>
+                            <select class="form-select form-select-sm select-usuario" data-id_c="${s.id_c}" data-id_u="${s.id_u}">
+                                <option value="">Sin asignar</option>
+                            </select>
+                           </td>
+
                             <td class="text-end">
                               <button class="btn btn-sm btn-outline-primary me-1 btn-edit" data-id_c="${s.id_c}" title="Editar">
                                 <i class="bi bi-pencil"></i>
                               </button>
-                          </td>
+                            </td>
                           </tr>
                      `);
                     //aqui se muestra la informacion de los alumnos en la tabla
                     $("#tblcampos tbody").html(row);
+
+                       $.getJSON("../api/ListU.php", function(respU){
+                        if(!respU.ok){
+                            return;
+                        } 
+                            $(".select-usuario").each(function(){
+                            // aqui declaro una varia actual para guradar el usuario que esta gurado en campo
+                            let atual = $(this).data("id_u") || "";
+                            //en esta para te le dijo que inice con sin asignar
+                            let options = `<option value="">Sin asignar</option>`;
+                            //$atual = $fila['id_u'] ?? '';
+                            
+                            // pues hago un clico para motrar los usuarios con el select 
+                            for(let hola = 0; hola < respU.data.length; hola++){
+                                let va = respU.data[hola];
+                                // pues aqui por cada user se crea el option con su id y su nombre 
+                                options += '<option value = "' + va.id_u + '">' + va.usuario + '</option>';
+                            }
+
+                            $(this).html(options);
+                            $(this).val(atual);
+                        });
+                    });
                      
                 });
             }
-
              $(document).on("click",".btn-edit", function(){
                   //alert("diste click en editar");
                   //aqui se obtiene el id de para mostrarl o jalar la informaion 
@@ -78,10 +115,34 @@ $resultA = $Connection->query($queryA);
                     $("#edit-tipo").val(data.tipo);
                     $("#edit-numero").val(data.numero);
                     $("#edit-estado").val(data.estado);
+                    
+                    // este lo que hace es limpiar el select
+                    //$("#edit-id_u").val('');
+                    // y este pone el usario corecto
+                    $("#edit-id_u").val(data.id_u);
+        
                     $("#modaedit").modal('show');
+
                   });
                   
             });
+
+                $(document).on("change", ".select-usuario", function(){
+                    const id_c = $(this).data("id_c");
+                    const id_u = $(this).val();
+    
+                    $.post("../api/AsigU.php", {id_c:id_c, id_u:id_u}, function(resp){
+                        try{resp = JSON.parse(resp);} catch(e){resp={ok:false, msg:'Error al asignar'};}
+                        if(!resp.ok) {
+                        showAlert('danger', resp.msg || 'Error al asignar');
+                        return;
+                    }
+                    showAlert('success', 'El anotador fue asignado correctamente');
+                    cargaCampos();
+                    });
+                });
+
+
 
             $("#formCamp").on("submit", function(e){
                 e.preventDefault();
@@ -92,34 +153,37 @@ $resultA = $Connection->query($queryA);
                      return;
                    }
                    $("#modaedit").modal('hide');
-                   showAlert('success', 'Campo editado correctamente');
+                   showAlert('success', 'Se edito correctamente');
                    cargaCampos();
                 });
             });
                 cargaCampos();
+                
+
       });
 
 </script>
 
 </head>
-<body>
+<body class="fondo">
     
     <div class="d-flex">
-        <div class="sidebar d-flex flex-column bg-dark" style="width: 200px; height: 100vh;">
-            <div Class="text-white p-3 border-bottom border-secondary fw-bold">NADA</div>
-            <a href="Admin.php">Gestionar Trabajadores</Tr></a>
-            <a href="Gestion_Usua.php">Gestionar Usuarios</a>
-            <a href="Gestion_Camp.php">Gestionar Campos</a>
-            <a href="Productos.php">Configurar Valores y Productos</a>
-            <a href="#">Reportes Generales</a>
-            <a href="#">Historial de Resgistro</a>
+        <div class="sidebar vidrio-sidebar d-flex flex-column bg-dark" style="width: 200px; height: 100vh;">
+            <div Class="textobarsup">NADA</div>
+            <a class="textobar" href="Admin.php">Gestionar Trabajadores</Tr></a>
+            <a class="textobar" href="Gestion_Usua.php">Gestionar Usuarios</a>
+            <a class="textobar" href="Gestion_Camp.php">Gestionar Campos</a>
+            <a class="textobar" href="Productos.php">Configurar Valores y Productos</a>
+            <a class="textobar" href="#">Reportes Generales</a>
+            <a class="textobar" href="#">Historial de Resgistro</a>
+            <a class="a-barra-salir" href="../logins/logout.php">Cerrar Sesión</a>
         </div>
         <div class="container mt-4">
             <div id="alertBox">
              
             </div>
             <!-- la tabla de los trabajadores -->
-            <table class="table table-striped table-bordered" id="tblcampos">
+            <table class="table tabla-transparente" id="tblcampos">
                 <thead class="table-dark">
                     <tr>
                         <th>Id</th>
@@ -128,26 +192,27 @@ $resultA = $Connection->query($queryA);
                         <th>Tipo</th>
                         <th>Número</th>
                         <th>Estado</th>
+                        <th>Anotador</th>
                         <th>Editar</th>
                     </tr>
                 </thead>
                     <tbody>
                          <tr>
                             <!-- aqui uso el colspan para unir las celdas y para usar usar ajax  -->
-                            <td colspan="7" class="text-center" text-secondary p-4>Cargando...</td>
+                            <td colspan="8" class="text-center" text-secondary p-4>Cargando...</td>
                             
                         </tr>
                     </tbody>
             </table>
             <div class="container mt-3 text-center">
-                <button class="btn btn-primary px-5" data-bs-toggle="modal" data-bs-target="#modalt">Añadir Campo</button>
+                <button class="btn pulse-effect" data-bs-toggle="modal" data-bs-target="#modalt">Añadir Campo</button>
             </div>
             <div class="modal fade" id="modalt" tabindex="-1" aria-labelledby="modalt" aria-hidden="true">
             <div class="modal-dialog">
-                <div class="modal-content">
+                <div class="modal-content modal-vidrio">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="modalt">Agregar Campos</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close equis" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form action="../PHP/GuardarC.php" method="post" id="form">
@@ -188,12 +253,13 @@ $resultA = $Connection->query($queryA);
                             <option value="Inativo">Inativo</option>
                             </select>
                         </div>
+                         
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Salir</button>
+                    <button type="button" class="btn btn-salir" data-bs-dismiss="modal">Salir</button>
                     <!-- uso el tipo submit para que envie el formulario -->
-                    <button type="submit" form="form" class="btn btn-primary">Guardar</button>
+                    <button type="submit" form="form" class="btn pulse-effect">Guardar</button>
                     
                 </div>
                 </div>
@@ -205,7 +271,7 @@ $resultA = $Connection->query($queryA);
             <div class="modal-dialog">
                 <div class="modal-content">
                 <div class="modal-header">
-                    ]<h5 class="modal-title">Editar Campo</h5>
+                    <h5 class="modal-title">Editar Campo</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -249,13 +315,13 @@ $resultA = $Connection->query($queryA);
                             <option value="Inativo">Inativo</option>
                             </select>
                         </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Salir</button>
+                        <!-- uso el tipo submit para que envie el formulario -->
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        
+                         </div>
                     </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Salir</button>
-                    <!-- uso el tipo submit para que envie el formulario -->
-                    <button type="submit" class="btn btn-primary">Guardar</button>
-                    
                 </div>
                 </div>
             </div>
