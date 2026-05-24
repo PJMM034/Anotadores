@@ -92,20 +92,6 @@ require_role('ADMIN');
 </head>
 <body>
     <div class="d-flex">
-<<<<<<< Updated upstream
-        <div class="sidebar d-flex flex-column bg-dark" style="width: 200px; height: 100vh;">
-            <div class="text-white p-3 border-bottom border-secondary fw-bold">NADA</div>
-            <a href="Admin.php">Gestionar Trabajadores</a>
-            <a href="Gestion_Usua.php">Gestionar Usuarios</a>
-            <a href="Gestion_Camp.php">Gestionar Campos</a>
-            <a href="Productos.php">Configurar Valores y Productos</a>
-            <a href="#">Reportes Generales</a>
-            <a href="#">Historial de Registro</a>
-        </div>
-        <div class="container mt-4">
-            <div id="alertBox"></div>
-            <table class="table table-striped table-bordered" id="tblusuarios">
-=======
         <div class="sidebar vidrio-sidebar d-flex flex-column bg-dark" style="width: 200px; height: 100vh;">
             <div class="textobarsup">NADA</div>
             <a class="textobar" href="Admin.php">Gestionar Trabajadores</a>
@@ -119,7 +105,6 @@ require_role('ADMIN');
         <div class="container mt-4">
             <div id="alertBox"></div>
             <table class="table tabla-transparente" id="tblusuarios">
->>>>>>> Stashed changes
                 <thead class="table-dark">
                     <tr>
                         <th>Id</th>
@@ -136,16 +121,6 @@ require_role('ADMIN');
                 </tbody>
             </table>
             <div class="container mt-3 text-center">
-<<<<<<< Updated upstream
-                <button class="btn btn-primary px-5" data-bs-toggle="modal" data-bs-target="#modalt">Añadir Usuario</button>
-            </div>
-            <div class="modal fade" id="modalt" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Agregar Usuario</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-=======
                 <button class="btn pulse-effect" data-bs-toggle="modal" data-bs-target="#modalt">Añadir Usuario</button>
             </div>
             <div class="modal fade" id="modalt" tabindex="-1" aria-hidden="true">
@@ -154,7 +129,6 @@ require_role('ADMIN');
                         <div class="modal-header">
                             <h5 class="modal-title">Agregar Usuario</h5>
                             <button type="button" class="btn-close equis" data-bs-dismiss="modal" aria-label="Close"></button>
->>>>>>> Stashed changes
                         </div>
                         <div class="modal-body">
                             <form action="../PHP/GuardarU.php" method="post" id="formadd">

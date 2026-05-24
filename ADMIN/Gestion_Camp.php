@@ -76,11 +76,7 @@ $resultA = $Connection->query($queryA);
                             return;
                         } 
                             $(".select-usuario").each(function(){
-<<<<<<< Updated upstream
-                            // aqui declaro una varia atual para guradar el usuario que esta gurado en campo
-=======
                             // aqui declaro una varia actual para guradar el usuario que esta gurado en campo
->>>>>>> Stashed changes
                             let atual = $(this).data("id_u") || "";
                             //en esta para te le dijo que inice con sin asignar
                             let options = `<option value="">Sin asignar</option>`;
