@@ -2,8 +2,8 @@
 $Hostname = "localhost";
 $User = "root";
 $Pass = "Ramirez034";
-$DB = "anotadores";
-$Connection = new mysqli($Hostname,$User,$Pass,$DB,3306);
+$DB = "Anotadores";
+$Connection = new mysqli($Hostname,$User,$Pass,$DB);
 
 if ($Connection->connect_errno) {
 	echo "Error";
