@@ -141,8 +141,23 @@ $resultA = $Connection->query($queryA);
                     cargaCampos();
                     });
                 });
+ 
 
-
+                $("#form").on("submit", function(e){
+                e.preventDefault();
+                $.post("../PHP/GuardarC.php",$(this).serialize(), function(resp){
+                try{resp = JSON.parse(resp);} catch(e){resp={ok:false, msg:'Error al guardar'};}
+                if(!resp.ok) {
+                     showAlert('danger', resp.msg || 'Este campo ya existe');
+                     return;
+                   }
+                   $("#modalt").modal('hide');
+                   showAlert('success', 'Campo registrado correctamente');
+                    $("#form")[0].reset();
+                   cargaCampos();
+                });
+            });
+            
 
             $("#formCamp").on("submit", function(e){
                 e.preventDefault();
@@ -215,7 +230,7 @@ $resultA = $Connection->query($queryA);
                     <button type="button" class="btn-close equis" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="../PHP/GuardarC.php" method="post" id="form">
+                    <form id="form">
                         <div class="mb-3">
                             <label for="nombre" class="form-label">Nombre del Campo</label>
                             <input type="text" class="form-control" id="nombre" name="nombre" required placeholder="Introduce el nombre del campo">
