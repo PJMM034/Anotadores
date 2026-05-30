@@ -19,7 +19,10 @@ $aguas = $_GET['aguas'] ?? '';
      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <script src="../js/jquery-4.0.0.js"></script>
+    <link rel="stylesheet" href="../CSS/autoC.css">
 
+
+    
     <script>
         $(document).ready(function(){
              function showAlert(type, msg) {
@@ -36,11 +39,29 @@ $aguas = $_GET['aguas'] ?? '';
                      return;
                 }
                 const data = resp.data;
-                $('#producto').val(data.producto);
-                $('#nombre').val(data.ubicacion);
-                $('#valor').val(data.valor);
+                $('#producto').val(data.producto); 
+                $('#nombre').val(data.ubicacion);    
+                $('#valor').val(data.valor);         
+                $('#id_producto').val(data.id_producto); 
+                $('#id_c').val(data.id_c);               
 
             });
+
+            // aqui cargo los tarabajadores para el datalist de para autocompletado
+            $.getJSON("../api/ListT.php", function(resp){
+                if(!resp.ok){
+                    showAlert('danger', resp.msg || 'Error al cargar cortadores');
+                    return;
+                }
+                let options = '';
+                for(let i = 0; i < resp.data.length; i++){
+                    let c = resp.data[i];
+                    options += '<option value="' + c.nombre + '">' + c.nombre + '</option>';
+                }
+                $('#cortadoresList').html(options);
+            });
+
+
                $("#formcorte").on("submit", function(e){
                 // el preventDefault es para evitar que mande el formulario    
                  e.preventDefault();
@@ -79,17 +100,22 @@ $aguas = $_GET['aguas'] ?? '';
                             <form id="formcorte">
                                 <div class="mb-3">
                                     <label class="form-label fw-semibold" for="producto">Producto *</label>
-                                    <input class="form-control" type="text" id="producto" name="producto" required readonly>
+                                    <input class="form-control" type="hidden" id="id_producto" name="id_producto"readonly>
+                                    <input class="form-control" type="text" id="producto" name="producto"readonly>
                                 </div>
 
                                 <div class="mb-3">
                                     <label class="form-label fw-semibold" for="nombre">Ubicación *</label>
-                                    <input class="form-control" type="text" id="nombre" name="nombre" required readonly>
+                                    <input class="form-control" type="hidden" id="id_c" name="id_c" readonly>
+                                    <input class="form-control" type="text" id="nombre" name="nombre" readonly>
                                 </div> 
 
                                 <div class="mb-3">
                                     <label class="form-label fw-semibold" for="cortador">Cortador *</label>
-                                    <input class="form-control" type="text" id="cortador" name="cortador" required placeholder="Escriba el nombre del empleado">
+                                    <input class="form-control" type="text" id="cortador" name="cortador" required placeholder="Escriba el nombre del empleado"
+                                    list="cortadoresList" autocomplete="off">
+                                    <datalist id="cortadoresList">
+
                                 </div>
                                 <div class="mb-4">
                                     <label class="form-label fw-semibold" for="valor">Precio del producto *</label>

@@ -46,7 +46,7 @@ $resultA = $Connection->query($queryA);
                           <tr class="tabladiseño"> 
                             <td>${s.id_t}</td>
                             <td>${s.nombre}</td>
-                            <td>${s.puesto}</td>
+                            
                             <td>${s.estado}</td>
                             <td class="text-end text-center">
                               <button class="btn justify-center-content btn-sm btn-outline-primary me-1 btn-edit" data-id_t="${s.id_t}" title="Editar">
@@ -76,13 +76,29 @@ $resultA = $Connection->query($queryA);
                    const data = resp.data;
                     $("#edit-id_t").val(data.id_t);
                     $("#edit-nombre").val(data.nombre);
-                    $("#edit-puesto").val(data.puesto);
+                    
                     $("#edit-estado").val(data.estado);
 
                     $("#modaled").modal('show');
                   });
                   
             });
+
+             $("#form").on("submit", function(e){
+                e.preventDefault();
+                $.post("../PHP/GuardarT.php",$(this).serialize(), function(resp){
+                try{resp = JSON.parse(resp);} catch(e){resp={ok:false, msg:'Error al editar'};}
+                if(!resp.ok) {
+                     showAlert('danger', resp.msg || 'Este trabajador ya existe');
+                     return;
+                   }
+                   $("#modalt").modal('hide');
+                   showAlert('success', 'Trabajador registrado correctamente');
+                    $("#form")[0].reset();
+                   cargaTrabajadores();
+                });
+            });
+
 
             $("#formT").on("submit", function(e){
                 e.preventDefault();
@@ -126,8 +142,7 @@ $resultA = $Connection->query($queryA);
                         <th>ID</th>
                         <th>Trabajadores</th>
                         <th>Estado</th>
-                        <th>Puesto</th>
-                         <th>Editar</th>
+                        <th>Editar</th>
                     </tr>
                 </thead>
                     <tbody>
@@ -149,7 +164,7 @@ $resultA = $Connection->query($queryA);
                     <button type="button" class="btn-close equis" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="../PHP/GuardarT.php" method="post" id="form">
+                    <form method="post" id="form">
                         <div class="mb-3">
                             <label for="nombre" class="form-label">Nombre del Trabajador</label>
                             <input type="text" class="form-control" id="nombre" name="nombre" required placeholder="Introduce el nombre del trabajador Completo">
@@ -158,15 +173,7 @@ $resultA = $Connection->query($queryA);
                             <label for="estado" class="form-label">Estado</label>
                             <select class="form-select" name="estado" id="estado " required>
                             <option value="Activo">Activo</option>
-                            <option value="Inativo">Inativo</option>
-                            </select>
-                        </div>
-                         <div class="md-form mb-4">
-                            <label for="puesto" class="form-label">Puesto</label>
-                            <select class="form-select" name="puesto" id="puesto " required>
-                            <option value="">Ingresar el puesto</option>
-                            <option value="a">Activo</option>
-                            <option value="b">Inativo</option>
+                            <option value="Inactivo">Inactivo</option>
                             </select>
                         </div>
                     </form>
@@ -181,6 +188,7 @@ $resultA = $Connection->query($queryA);
             </div>
             </div>
         </div>
+
 
              <div class="modal fade" id="modaled" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog">
@@ -200,15 +208,7 @@ $resultA = $Connection->query($queryA);
                             <label for="edit-estado" class="form-label">Estado</label>
                             <select class="form-select" name="estado" id="edit-estado" required>
                             <option value="Activo">Activo</option>
-                            <option value="Inativo">Inativo</option>
-                            </select>
-                        </div>
-                         <div class="md-form mb-4">
-                            <label for="edit-puesto" class="form-label">Puesto</label>
-                            <select class="form-select" name="puesto" id="edit-puesto" required>
-                            <option value="">Ingresar el puesto</option>
-                            <option value="a">Activo</option>
-                            <option value="b">Inativo</option>
+                            <option value="Inactivo">Inactivo</option>
                             </select>
                         </div>
                         <div class="modal-footer">

@@ -24,23 +24,12 @@ $resultA = $Connection->query($queryA);
 
 
 <script>
-      
-      $(document).ready(function(){
-        const modaedit = new bootstrap.Modal(document.getElementById('modaedit'));
-        
-        function showAlert(type, msg) {
-                $("#alertBox").html(`
-                <div class="alert alert-${type} alert-dismissible fade show" role="alert">
-                    ${msg}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-                `);
+    
+       let paginaActual = 1;
 
-            }
-
-            
-            function cargaCampos(){
-                $.getJSON ("../api/ListC.php", function(resp){
+            function cargaCampos(pagina = 1){
+                paginaActual = pagina;
+                $.getJSON ("../api/ListC.php",{pagina:pagina} ,function(resp){
                     // Procesar los datos recibidos
                    if(!resp.ok) {
                      showAlert('danger', resp.msg || 'datos');
@@ -93,9 +82,32 @@ $resultA = $Connection->query($queryA);
                             $(this).val(atual);
                         });
                     });
+                    let mmds = '<ul class="pagination">';
+                     for(let i = 1; i <= resp.total_P; i++){
+                       mmds += `<li class="page-item ${i === pagina ? 'active' : ''}">
+                                <a class="page-link" href="#" onclick="cargaCampos(${i})">${i}</a>
+                            </li>`;
+                            }
+                            mmds += '</ul>';
+                            $("#pagination").html(mmds);
                      
                 });
+
             }
+      $(document).ready(function(){
+        const modaedit = new bootstrap.Modal(document.getElementById('modaedit'));
+        
+        function showAlert(type, msg) {
+                $("#alertBox").html(`
+                <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                    ${msg}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                `);
+
+            }
+
+        
              $(document).on("click",".btn-edit", function(){
                   //alert("diste click en editar");
                   //aqui se obtiene el id de para mostrarl o jalar la informaion 
@@ -141,8 +153,23 @@ $resultA = $Connection->query($queryA);
                     cargaCampos();
                     });
                 });
+ 
 
-
+                $("#form").on("submit", function(e){
+                e.preventDefault();
+                $.post("../PHP/GuardarC.php",$(this).serialize(), function(resp){
+                try{resp = JSON.parse(resp);} catch(e){resp={ok:false, msg:'Error al guardar'};}
+                if(!resp.ok) {
+                     showAlert('danger', resp.msg || 'Este campo ya existe');
+                     return;
+                   }
+                   $("#modalt").modal('hide');
+                   showAlert('success', 'Campo registrado correctamente');
+                    $("#form")[0].reset();
+                   cargaCampos();
+                });
+            });
+           
 
             $("#formCamp").on("submit", function(e){
                 e.preventDefault();
@@ -204,6 +231,7 @@ $resultA = $Connection->query($queryA);
                         </tr>
                     </tbody>
             </table>
+            <div id="pagination" class="d-flex justify-content-center mt-3"></div>
             <div class="container mt-3 text-center">
                 <button class="btn pulse-effect" data-bs-toggle="modal" data-bs-target="#modalt">Añadir Campo</button>
             </div>
@@ -215,7 +243,7 @@ $resultA = $Connection->query($queryA);
                     <button type="button" class="btn-close equis" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="../PHP/GuardarC.php" method="post" id="form">
+                    <form id="form">
                         <div class="mb-3">
                             <label for="nombre" class="form-label">Nombre del Campo</label>
                             <input type="text" class="form-control" id="nombre" name="nombre" required placeholder="Introduce el nombre del campo">
@@ -259,7 +287,7 @@ $resultA = $Connection->query($queryA);
                 <div class="modal-footer">
                     <button type="button" class="btn btn-salir" data-bs-dismiss="modal">Salir</button>
                     <!-- uso el tipo submit para que envie el formulario -->
-                    <button type="submit" form="form" class="btn pulse-effect">Guardar</button>
+                    <button type="submit" form="form" class="btn pulse-effect" data-bs-dismiss="modal">Guardar</button>
                     
                 </div>
                 </div>
