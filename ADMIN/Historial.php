@@ -30,7 +30,6 @@ $resultado = mysqli_query($Connection, $sql);
 <body>
 <div class="container mt-4">
     <h1 Class="textobarsup mb-4">Historial de Cortes</h1>
-
     <table class="table tabla-transparente" id="tblhistorial">
 
         <thead class="table-dark">
