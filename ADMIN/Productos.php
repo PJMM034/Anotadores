@@ -112,7 +112,7 @@ $resultA = $Connection->query($queryA);
             <a href="Gestion_Camp.php">Gestionar Campos</a>
             <a href="Productos.php">Configurar Valores y Productos</a>
             <a href="#">Reportes Generales</a>
-            <a href="#">Historial de Resgistro</a>
+            <a href="Historial.php">Historial de Resgistro</a>
         </div>
         <div class="container mt-4">
             <!-- la tabla de los trabajadores -->

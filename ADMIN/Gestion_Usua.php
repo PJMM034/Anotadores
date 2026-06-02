@@ -98,7 +98,7 @@ require_role('ADMIN');
             <a href="Gestion_Camp.php">Gestionar Campos</a>
             <a href="Productos.php">Configurar Valores y Productos</a>
             <a href="#">Reportes Generales</a>
-            <a href="#">Historial de Registro</a>
+            <a href="Historial.php">Historial de Registro</a>
         </div>
         <div class="container mt-4">
             <div id="alertBox"></div>
