@@ -1,7 +1,7 @@
 <?php
 $Hostname = "localhost";
-$User = "root";//victorteran
-$Pass = "mysql";
+$User = "root";
+$Pass = "mysql";//victorteran
 $DB = "anotadores";
 $Connection = new mysqli($Hostname,$User,$Pass,$DB);
 
