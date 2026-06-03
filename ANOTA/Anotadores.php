@@ -7,6 +7,7 @@ require_once '../logins/check.php';
 require_role('ANOTADOR');
 $productos = mysqli_query($Connection, "SELECT id, producto, valor FROM producto WHERE producto IS NOT NULL ORDER BY producto ASC");
 $campos = mysqli_query($Connection, "SELECT id_c, nombre, tipo, numero FROM campos WHERE estado = 'Activo' ORDER BY nombre ASC");
+$trabajadores = mysqli_query($Connection,"SELECT nombre FROM trabajadores WHERE estado = 'Activo'ORDER BY nombre ASC");
 $aguas = $_GET['aguas'] ?? '';
 ?>
 <!DOCTYPE html>
@@ -95,10 +96,15 @@ $aguas = $_GET['aguas'] ?? '';
                               </option>
                         <?php } ?>
                  </select>
-                               </div>
+                               </div> 
                                 <div class="mb-3">
                                     <label class="form-label fw-semibold" for="cortador">Cortador *</label>
-                                    <input class="form-control" type="text" id="cortador" name="cortador" required placeholder="Escriba el nombre del empleado">
+                                    <input class="form-control" type="text" id="cortador" name="cortador" list="cortadores" required placeholder="Escriba el nombre del empleado">
+                                    <datalist id="cortadores">
+                                        <?php while ($t = mysqli_fetch_assoc($trabajadores)) { ?>
+                                            <option value="<?php echo htmlspecialchars($t['nombre']); ?>">
+                                        <?php } ?>
+                                    </datalist>
                                 </div>
                                 <div class="mb-4">
                                     <label class="form-label fw-semibold" for="cantidad">Cantidad *</label>
