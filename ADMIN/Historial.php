@@ -2,12 +2,21 @@
 require_once '../Conexion/Conexion.php';
 session_start();
 
-$sql = "SELECT trabajador, producto, cantidad, valor,
-            (cantidad * valor) AS total, create_at
+$sql = "SELECT 
+            cortes.trabajador,
+            producto.producto AS producto,
+            cortes.cantidad,
+            cortes.valor,
+            (cortes.cantidad * cortes.valor) AS total,
+            cortes.create_at
         FROM cortes
-        ORDER BY trabajador ASC,
-                 DATE(create_at) DESC,
-                 create_at ASC";
+
+        INNER JOIN producto
+        ON cortes.producto = producto.id
+
+        ORDER BY cortes.trabajador ASC,
+                 DATE(cortes.create_at) DESC,
+                 cortes.create_at ASC";
 
 $resultado = mysqli_query($Connection, $sql);
 
@@ -52,7 +61,7 @@ function mostrarTotalDia($total_dia) {
         <a href="Gestion_Usua.php">Gestionar Usuarios</a>
         <a href="Gestion_Camp.php">Gestionar Campos</a>
         <a href="Productos.php">Configurar Valores y Productos</a>
-        <a href="#">Reportes Generales</a>
+        <a href="../PDF/GPDF.php">Reportes Generales</a>
         <a href="Historial.php">Historial de Registro</a>
     </div>
 
@@ -81,7 +90,12 @@ function mostrarTotalDia($total_dia) {
 
                 <h3 class="mt-5 mb-3 textobarsup">
                     <i class="bi bi-person-circle"></i>
+                    
                     <?php echo htmlspecialchars($trabajador_actual); ?>
+                    <a href="../PDF/GPDF.php?trabajador=<?php echo urlencode($trabajador_actual); ?>"
+                       target="_blank"
+                       class="btn btn-sm btn-primary ms-3"> Imprimir PDF</a>
+
                 </h3>
 
             <?php } ?>

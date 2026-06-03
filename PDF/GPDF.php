@@ -13,8 +13,28 @@ if(empty($trabajador)){
 }
 
 // Traer todos los cortes del trabajador del día
-$stmt = $Connection->prepare("SELECT *, DATE_FORMAT(create_at, '%d/%m/%Y') AS fecha_corte, DATE_FORMAT(create_at, '%H:%i:%s') AS hora
-    FROM cortes WHERE trabajador = ? AND DATE(create_at) = CURDATE() ORDER BY create_at ASC");
+//$stmt = $Connection->prepare("SELECT *, DATE_FORMAT(create_at, '%d/%m/%Y') AS fecha_corte, DATE_FORMAT(create_at, '%H:%i:%s') AS hora
+    //FROM cortes WHERE trabajador = ? AND DATE(create_at) = CURDATE() ORDER BY create_at ASC");
+    $stmt = $Connection->prepare("
+    SELECT 
+        cortes.id_corte,
+        cortes.id_u,
+        producto.producto AS producto,
+        cortes.campo,
+        cortes.trabajador,
+        cortes.cantidad,
+        cortes.valor,
+        cortes.total,
+        cortes.create_at,
+        DATE_FORMAT(cortes.create_at, '%d/%m/%Y') AS fecha_corte,
+        DATE_FORMAT(cortes.create_at, '%H:%i:%s') AS hora
+    FROM cortes
+    INNER JOIN producto
+    ON cortes.producto = producto.id
+    WHERE cortes.trabajador = ?
+    AND DATE(cortes.create_at) = CURDATE()
+    ORDER BY cortes.create_at ASC
+");
 $stmt->bind_param("s", $trabajador);
 $stmt->execute();
 $resultado = $stmt->get_result();

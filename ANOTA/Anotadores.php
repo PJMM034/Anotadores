@@ -1,13 +1,13 @@
 <?php
 // Incluye el archivo de verificación de sesión para asegurar que el usuario ha iniciado sesión antes de acceder a esta página.
 session_start();
+require_once '../Conexion/Conexion.php';
 require_once '../logins/check.php';
 //mando a llamar la funcion para validar el inicio de sesion
 require_role('ANOTADOR');
-
+$productos = mysqli_query($Connection, "SELECT id, producto, valor FROM producto WHERE producto IS NOT NULL ORDER BY producto ASC");
+$campos = mysqli_query($Connection, "SELECT id_c, nombre, tipo, numero FROM campos WHERE estado = 'Activo' ORDER BY nombre ASC");
 $aguas = $_GET['aguas'] ?? '';
-
-
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -29,18 +29,11 @@ $aguas = $_GET['aguas'] ?? '';
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
                 `);
- }    
-            $.getJSON("../api/GetUb.php", function(resp){
-                if(!resp.ok) {
-                     showAlert('danger', resp.msg || 'ERROR ID NO ENCONTRADO');
-                     return;
-                }
-                const data = resp.data;
-                $('#producto').val(data.producto);
-                $('#nombre').val(data.ubicacion);
-                $('#valor').val(data.valor);
-
-            });
+          }    
+           $("#producto").on("change", function(){
+           let valor = $(this).find(":selected").data("valor");
+           $("#valor").val(valor);
+           });
                $("#formcorte").on("submit", function(e){
                 // el preventDefault es para evitar que mande el formulario    
                  e.preventDefault();
@@ -58,11 +51,11 @@ $aguas = $_GET['aguas'] ?? '';
 
             });
         });
-    </script>
-</head>
-<body class="bg-light">
-    <div class="container">
-        <div class="row g-0">
+        </script>
+          </head>
+          <body class="bg-light">
+          <div class="container">
+          <div class="row g-0">
                 <div class="container py-4">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h1 class="h4 mb-0 text-dark">Registros de Cortes</h1>
@@ -78,22 +71,34 @@ $aguas = $_GET['aguas'] ?? '';
                         <div class="card-body p-4">
                             <form id="formcorte">
                                 <div class="mb-3">
-                                    <label class="form-label fw-semibold" for="producto">Producto *</label>
-                                    <input class="form-control" type="text" id="producto" name="producto" required readonly>
-                                </div>
+                            <label class="form-label fw-semibold" for="producto">Producto *</label>
 
-                                <div class="mb-3">
-                                    <label class="form-label fw-semibold" for="nombre">Ubicación *</label>
-                                    <input class="form-control" type="text" id="nombre" name="nombre" required readonly>
-                                </div> 
+                            <select class="form-select" id="producto" name="producto" required>
+                            <option value="">Seleccione un producto</option>
 
+                        <?php while ($p = mysqli_fetch_assoc($productos)) { ?>
+                            <option value="<?php echo $p['id']; ?>" data-valor="<?php echo $p['valor']; ?>">
+                            <?php echo htmlspecialchars($p['producto']); ?>
+                           </option>
+                        <?php } ?>
+               </select>
+           </div>
+
+           <input type="hidden" id="valor" name="valor">
+                               <div class="mb-3">
+                                   <label class="form-label fw-semibold" for="nombre">Ubicación *</label>
+                                   <select class="form-select" id="nombre" name="nombre" required>
+                                <option value="">Seleccione una ubicación</option>
+                                <?php while ($c = mysqli_fetch_assoc($campos)) { ?>
+                                <option value="<?php echo $c['id_c']; ?>">
+                                <?php echo htmlspecialchars($c['nombre'] . ' - ' . $c['tipo'] . ' ' . $c['numero']); ?>
+                              </option>
+                        <?php } ?>
+                 </select>
+                               </div>
                                 <div class="mb-3">
                                     <label class="form-label fw-semibold" for="cortador">Cortador *</label>
                                     <input class="form-control" type="text" id="cortador" name="cortador" required placeholder="Escriba el nombre del empleado">
-                                </div>
-                                <div class="mb-4">
-                                    <label class="form-label fw-semibold" for="valor">Precio del producto *</label>
-                                    <input class="form-control" type="number" id="valor" name="valor" required placeholder="0" min="0" style="max-width: 150px;" readonly>
                                 </div>
                                 <div class="mb-4">
                                     <label class="form-label fw-semibold" for="cantidad">Cantidad *</label>
@@ -106,7 +111,6 @@ $aguas = $_GET['aguas'] ?? '';
                         </div>
                     </div>
                 </div>
-        
         </div>
     </div>
 </body>
