@@ -1,7 +1,7 @@
 <?php
 require_once '../Conexion/Conexion.php';
 
-$por_pagina = 10;
+$por_pagina = 7;
 $pagina = isset($_GET['pagina']) ? max(1, (int)$_GET['pagina']) : 1;
 $inicio = ($pagina - 1) * $por_pagina;
 

@@ -12,6 +12,7 @@ require_role('ANOTADOR');
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../js/jquery-4.0.0.js"></script>
+    <link rel="stylesheet" href="../CSS/EstiloAdmin.css">
 
 <script>
 $(document).ready(function(){
@@ -65,6 +66,8 @@ $(document).ready(function(){
                         cortelist += '<div class="fw-semibold">' + c.nombre_p + '</div>';
                         // qui se muestra las candidas y hora de cada corte 
                         cortelist += '<div class="text-secondary small">' + c.cantidad + ' Kg — ' + lahora + '</div>';
+                        cortelist += '<a href="../PDF/GPDF.php?trabajador=' + c.trabajador + '" class="btn btn-sm btn-outline-primary mt-2">Ver PDF</a>';
+                        
                         cortelist += '</div>';
                     
                 }
@@ -102,7 +105,7 @@ $(document).ready(function(){
     <div class="container py-4">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h1 class="h4 mb-0 text-dark">Cortes del día</h1>
-            <a class="btn btn-outline-dark" href="Anotadores.php">Regresar</a>
+            <a class="btn btn-outline-danger" href="Anotadores.php">Regresar</a>
         </div>
 
         <div class="accordion" id="acordiondecortes">

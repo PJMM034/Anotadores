@@ -19,7 +19,7 @@ $aguas = $_GET['aguas'] ?? '';
      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <script src="../js/jquery-4.0.0.js"></script>
-    <link rel="stylesheet" href="../CSS/autoC.css">
+    <link rel="stylesheet" href="../CSS/EstiloAdmin.css">
 
 
     
@@ -84,11 +84,12 @@ $aguas = $_GET['aguas'] ?? '';
 <body class="bg-light">
     <div class="container">
         <div class="row g-0">
-                <div class="container py-4">
+                <div class="container py-4 ">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h1 class="h4 mb-0 text-dark">Registros de Cortes</h1>
-                        <div>
-                            <a class="btn btn-outline-dark" href="ListaD.php">Cortes del día</a>
+                        <div class="d-flex gap-2">
+                            <a class="btn btn-outline-danger" href="ListaD.php">Cortes del día</a>
+
                             <a class="btn btn-outline-danger" href="../logins/logout.php">Cerrar sesion</a>
                         </div>
                     </div>

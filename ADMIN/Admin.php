@@ -21,22 +21,12 @@ $resultA = $Connection->query($queryA);
     <script src="../js/jquery-4.0.0.js"></script>
 
 <script>
-      
-      $(document).ready(function(){
-        const modaled = new bootstrap.Modal(document.getElementById('modaled'));
-        
-        function showAlert(type, msg) {
-                $("#alertBox").html(`
-                <div class="alert alert-${type} alert-dismissible fade show" role="alert">
-                    ${msg}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-                `);
 
-            } 
+    let paginaActual = 1;
 
-            function cargaTrabajadores(){
-                $.getJSON ("../api/ListT.php", function(resp){
+     function cargaTrabajadores(pagina = 1){
+                paginaActual = pagina;
+                $.getJSON ("../api/ListT.php",{pagina:pagina} ,function(resp){
                     // Procesar los datos recibidos
                    if(!resp.ok) {
                      showAlert('danger', resp.msg || 'datos');
@@ -57,9 +47,32 @@ $resultA = $Connection->query($queryA);
                      `);
                     //aqui se muestra la informacion de los alumnos en la tabla
                     $("#tbltrabajadores tbody").html(row);
-                     
+                     //aqui empieza la recontruccion de la paginacion
+                     let mmds = '<ul class="pagination">';
+                     for(let i = 1; i <= resp.total_P; i++){
+                       mmds += `<li class="page-item ${i === pagina ? 'active' : ''}">
+                                <a class="page-link" href="#" onclick="cargaTrabajadores(${i})">${i}</a>
+                            </li>`;
+                            }
+                            mmds += '</ul>';
+                            $("#pagination").html(mmds);
                 });
             }
+      
+      $(document).ready(function(){
+        const modaled = new bootstrap.Modal(document.getElementById('modaled'));
+        
+        function showAlert(type, msg) {
+                $("#alertBox").html(`
+                <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                    ${msg}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                `);
+
+            } 
+
+          
 
              $(document).on("click",".btn-edit", function(){
                   //alert("diste click en editar");
@@ -90,6 +103,7 @@ $resultA = $Connection->query($queryA);
                 try{resp = JSON.parse(resp);} catch(e){resp={ok:false, msg:'Error al editar'};}
                 if(!resp.ok) {
                      showAlert('danger', resp.msg || 'Este trabajador ya existe');
+                     $("#form")[0].reset();
                      return;
                    }
                    $("#modalt").modal('hide');
@@ -127,8 +141,8 @@ $resultA = $Connection->query($queryA);
             <a class="textobar" href="Gestion_Usua.php">Gestionar Usuarios</a>
             <a class="textobar" href="Gestion_Camp.php">Gestionar Campos</a>
             <a class="textobar" href="Productos.php">Configurar Valores y Productos</a>
-            <a class="textobar" href="#">Reportes Generales</a>
-            <a class="textobar" href="#">Historial de Resgistro</a>
+            <a class="textobar" href="Reportes.php">Reportes Generales</a>
+            <a class="textobar" href="Historial.php">Historial de Resgistro</a>
             <a class="a-barra-salir" href="../logins/Logout.php">Cerrar Sesion</a>
         </div>
         <div class="container mt-4">
@@ -153,8 +167,9 @@ $resultA = $Connection->query($queryA);
                         </tr>
                     </tbody>
             </table>
+            <div id="pagination" class="d-flex justify-content-center mt-3"></div> 
             <div class="container mt-3 text-center">
-                <button class="btn pulse-effect btn-primary px-5" data-bs-toggle="modal" data-bs-target="#modalt">Añadir Producto</button>
+                <button class="btn pulse-effect btn-primary px-5" data-bs-toggle="modal" data-bs-target="#modalt">Añadir Trabajador</button>
             </div>
             <div class="modal fade" id="modalt" tabindex="-1" aria-labelledby="modalt" aria-hidden="true">
             <div class="modal-dialog">
@@ -181,7 +196,7 @@ $resultA = $Connection->query($queryA);
                 <div class="modal-footer">
                     <button type="button " class="btn btn-salir" data-bs-dismiss="modal">Salir</button>
                     <!-- uso el tipo submit para que envie el formulario -->
-                    <button type="submit " form="form" class="btn pulse-effect">Guardar</button>
+                    <button type="submit " form="form" class="btn pulse-effect" data-bs-dismiss="modal">Guardar</button>
                     
                 </div>
                 </div>
@@ -192,7 +207,7 @@ $resultA = $Connection->query($queryA);
 
              <div class="modal fade" id="modaled" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog">
-                <div class="modal-content">
+                <div class="modal-content modal-vidrio">
                 <div class="modal-header">
                     <h1 class="modal-title ">Agregar Trabajador</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>

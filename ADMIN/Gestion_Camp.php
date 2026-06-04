@@ -161,6 +161,7 @@ $resultA = $Connection->query($queryA);
                 try{resp = JSON.parse(resp);} catch(e){resp={ok:false, msg:'Error al guardar'};}
                 if(!resp.ok) {
                      showAlert('danger', resp.msg || 'Este campo ya existe');
+                     $("#form")[0].reset();
                      return;
                    }
                    $("#modalt").modal('hide');
@@ -201,8 +202,8 @@ $resultA = $Connection->query($queryA);
             <a class="textobar" href="Gestion_Usua.php">Gestionar Usuarios</a>
             <a class="textobar" href="Gestion_Camp.php">Gestionar Campos</a>
             <a class="textobar" href="Productos.php">Configurar Valores y Productos</a>
-            <a class="textobar" href="#">Reportes Generales</a>
-            <a class="textobar" href="#">Historial de Resgistro</a>
+            <a class="textobar" href="Reportes.php">Reportes Generales</a>
+            <a class="textobar" href="Historial.php">Historial de Resgistro</a>
             <a class="a-barra-salir" href="../logins/logout.php">Cerrar Sesión</a>
         </div>
         <div class="container mt-4">
@@ -231,7 +232,7 @@ $resultA = $Connection->query($queryA);
                         </tr>
                     </tbody>
             </table>
-            <div id="pagination" class="d-flex justify-content-center mt-3"></div>
+             <div id="pagination" class="d-flex justify-content-center mt-3"></div> 
             <div class="container mt-3 text-center">
                 <button class="btn pulse-effect" data-bs-toggle="modal" data-bs-target="#modalt">Añadir Campo</button>
             </div>
@@ -278,7 +279,7 @@ $resultA = $Connection->query($queryA);
                             <label for="estado" class="form-label">Estado</label>
                             <select class="form-select" name="estado" id="estado " required>
                             <option value="Activo">Activo</option>
-                            <option value="Inativo">Inativo</option>
+                            <option value="Inactivo">Inactivo</option>
                             </select>
                         </div>
                          
@@ -297,7 +298,7 @@ $resultA = $Connection->query($queryA);
 
            <div class="modal fade" id="modaedit" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog">
-                <div class="modal-content">
+                <div class="modal-content modal-vidrio">
                 <div class="modal-header">
                     <h5 class="modal-title">Editar Campo</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -340,7 +341,7 @@ $resultA = $Connection->query($queryA);
                             <label for="edit-estado" class="form-label">Estado</label>
                             <select class="form-select" name="estado" id="edit-estado" required>
                             <option value="Activo">Activo</option>
-                            <option value="Inativo">Inativo</option>
+                            <option value="Inactivo">Inactivo</option>
                             </select>
                         </div>
                         <div class="modal-footer">

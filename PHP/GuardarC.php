@@ -9,6 +9,7 @@ $tipo = $_POST['tipo'];
 $numero = $_POST['numero'];
 $estado = $_POST['estado'];
 $id_u = $_POST['id_u'] ?? null;
+
 // verificamos si ya exite el campo
 $stmt = $Connection->prepare("SELECT id_c FROM campos WHERE nombre = ?");
 $stmt->bind_param("s", $nombre);

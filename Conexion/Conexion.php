@@ -2,7 +2,7 @@
 $Hostname = "localhost";
 $User = "root";
 $Pass = "victorteran";
-$DB = "anotadores";
+$DB = "Anotadores";
 $Connection = new mysqli($Hostname,$User,$Pass,$DB);
 
 if ($Connection->connect_errno) {

@@ -9,7 +9,7 @@ if($id_c <= 0){
     exit;
 }
 
-//  este es para validar que anotadoe no este asignaod a un cammpo
+//  este es para validar que anotadoe no este asignado a un cammpo
 if($id_u != null){
     $vali = $Connection->prepare("SELECT id_c FROM campos WHERE id_u = ? AND id_c != ?");
     $vali->bind_param("ii", $id_u, $id_c);
