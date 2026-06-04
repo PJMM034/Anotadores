@@ -52,22 +52,23 @@ function mostrarTotalDia($total_dia) {
 
 <body>
 
-<div class="d-flex">
+   <div class="d-flex">
+        <div class="sidebar vidrio-sidebar d-flex flex-column bg-dark" style="width: 200px; height: 100vh;">
+            <img src="../imagenes/AgroBitacora-logo.png" alt="AgroBitacora"></img>
+            <a class="textobar" href="Admin.php">Gestionar Trabajadores</Tr></a>
+            <a class="textobar" href="Gestion_Usua.php">Gestionar Usuarios</a>
+            <a class="textobar" href="Gestion_Camp.php">Gestionar Campos</a>
+            <a class="textobar" href="Productos.php">Configurar Valores y Productos</a>
+            <a class="textobar" href="Reportes.php">Reportes Generales</a>
+            <a class="textobar" href="Historial.php">Historial de Resgistro</a>
+            <a class="a-barra-salir" href="../logins/logout.php">Cerrar Sesión</a>
+        </div>
+        <div class="container mt-4">
+            <div id="alertBox">
+             
+            </div>
 
-    <div class="sidebar d-flex flex-column bg-dark" style="width: 200px; min-height: 100vh;">
-        <div class="text-white p-3 border-bottom border-secondary fw-bold">NADA</div>
-
-        <a href="Admin.php">Gestionar Trabajadores</a>
-        <a href="Gestion_Usua.php">Gestionar Usuarios</a>
-        <a href="Gestion_Camp.php">Gestionar Campos</a>
-        <a href="Productos.php">Configurar Valores y Productos</a>
-        <a href="../PDF/GPDF.php">Reportes Generales</a>
-        <a href="Historial.php">Historial de Registro</a>
-    </div>
-
-    <div class="container mt-4">
-
-        <h1 class="textobarsup fw-bold mb-4">
+        <h1 class=" fw-bold mb-4 font-family-excalibur">
             Historial de Cortes por Trabajador
         </h1>
 
@@ -116,7 +117,7 @@ function mostrarTotalDia($total_dia) {
                     <?php echo date("d/m/Y", strtotime($fecha_actual)); ?>
                 </h5>
 
-                <table class="table table-striped table-bordered">
+                <table class="table table-striped table-bordered tabla-transparente">
                     <thead class="table-dark">
                         <tr>
                             <th>Producto</th>

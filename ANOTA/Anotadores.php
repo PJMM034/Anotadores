@@ -48,18 +48,33 @@ $aguas = $_GET['aguas'] ?? '';
             });
 
             // aqui cargo los tarabajadores para el datalist de para autocompletado
-            $.getJSON("../api/ListT.php", function(resp){
-                if(!resp.ok){
-                    showAlert('danger', resp.msg || 'Error al cargar cortadores');
-                    return;
-                }
-                let options = '';
-                for(let i = 0; i < resp.data.length; i++){
-                    let c = resp.data[i];
-                    options += '<option value="' + c.nombre + '">' + c.nombre + '</option>';
-                }
-                $('#cortadoresList').html(options);
-            });
+            
+                 let cortadoresData = [];
+                $.getJSON("../api/ListT.php", function(resp){
+                    if(!resp.ok){ showAlert('danger', resp.msg || 'Error'); return; }
+                    cortadoresData = resp.data;
+                });
+
+                $('#cortador').on('input', function(){
+                    let q = $(this).val().toLowerCase();
+                    let lista = $('#cortadoresList');
+                    if(!q){ lista.hide(); return; }
+
+                    let f = cortadoresData.filter(c => c.nombre.toLowerCase().includes(q));
+                    if(!f.length){ lista.hide(); return; }
+
+                    lista.html(f.map(c => '<div class="autocomplete-item" data-nombre="' + c.nombre + '">' + c.nombre + '</div>').join('')).show();
+                });
+
+                $(document).on('click', '.autocomplete-item', function(){
+                    $('#cortador').val($(this).data('nombre'));
+                    $('#cortadoresList').hide();
+                });
+
+                $(document).on('click', function(e){
+                    if(!$(e.target).closest('#cortador, #cortadoresList').length)
+                        $('#cortadoresList').hide();
+                });
 
 
                $("#formcorte").on("submit", function(e){
@@ -84,19 +99,20 @@ $aguas = $_GET['aguas'] ?? '';
 <body class="bg-light">
     <div class="container">
         <div class="row g-0">
-                <div class="container py-4 ">
+                <div class="container py-4 modal-vidrio">
                     <div class="d-flex justify-content-between align-items-center mb-3">
+                        <img src="../imagenes/AgroBitacora-logo.png" alt="AgroBitacora" style="height: 100px;"></img>
                         <h1 class="h4 mb-0 text-dark">Registros de Cortes</h1>
                         <div class="d-flex gap-2">
-                            <a class="btn btn-outline-danger" href="ListaD.php">Cortes del día</a>
+                            <a class="pulse-effect" href="ListaD.php">Cortes del día</a>
 
-                            <a class="btn btn-outline-danger" href="../logins/logout.php">Cerrar sesion</a>
+                            <a class="btn-salir" href="../logins/logout.php">Cerrar sesion</a>
                         </div>
                     </div>
                     <div id="alertBox">
         
                     </div>
-                    <div class="card border-0 shadow-sm">
+                    <div class="card border-0 shadow-sm modal-vidrio">
                         <div class="card-body p-4">
                             <form id="formcorte">
                                 <div class="mb-3">
@@ -114,8 +130,8 @@ $aguas = $_GET['aguas'] ?? '';
                                 <div class="mb-3">
                                     <label class="form-label fw-semibold" for="cortador">Cortador *</label>
                                     <input class="form-control" type="text" id="cortador" name="cortador" required placeholder="Escriba el nombre del empleado"
-                                    list="cortadoresList" autocomplete="off">
-                                    <datalist id="cortadoresList">
+                                     autocomplete="off">
+                                    <div id="cortadoresList" class="autocomplete-items"></div>
 
                                 </div>
                                 <div class="mb-4">
@@ -127,7 +143,7 @@ $aguas = $_GET['aguas'] ?? '';
                                     <input class="form-control" type="number" id="cantidad"  name="cantidad" required placeholder="0" min="0" style="max-width: 150px;">
                                 </div>
                                 <div class="text-center">
-                                <button class="btn btn-primary" type="submit">Guardar Corte</button>
+                                <button class="pulse-effect" type="submit">Guardar Corte</button>
                                 </div>
                             </form>
                         </div>

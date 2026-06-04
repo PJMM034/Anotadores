@@ -4,8 +4,6 @@ require_once '../logins/check.php';
 //mando a llamar la funcion para validar el inicio de sesion
 require_role('ADMIN');
 
-$aguas = $_GET['aguas'] ?? '';
-
 
 ?>
 
@@ -30,9 +28,7 @@ $aguas = $_GET['aguas'] ?? '';
     $.getJSON("../api/ListU.php")
 ).done(function (t, c, p, u) {
     
-    // 1. EL CAMBIO DEL [0]:
-    // Como ahorita $.when() solo está ejecutando UNA petición (ListT), 
-    // jQuery te entrega el JSON directo, así que le quitamos el [0]
+    
     var tData = t[0].data || [];
     var cData = c[0].data || [];
     var pData = p[0].data || [];
@@ -40,13 +36,9 @@ $aguas = $_GET['aguas'] ?? '';
    
 
     $("#totalTrabajadores").text(tData.length);
-    
-    // 2. EL ERROR DE VARIABLES FANTASMA:
-    // Tienes que comentar estas líneas también. Si JavaScript intenta leer
-    // cData.length pero cData está comentado arriba, el script explota.
     $("#totalCampos").text(cData.length);
-     $("#totalProductos").text(pData.length);
-        $("#totalUsuarios").text(uData.length);
+    $("#totalProductos").text(pData.length);
+    $("#totalUsuarios").text(uData.length);
     
 
         
@@ -58,70 +50,58 @@ $aguas = $_GET['aguas'] ?? '';
 <body>
       <div class="d-flex">
         <div class="sidebar vidrio-sidebar d-flex flex-column bg-dark" style="width: 200px; height: 100vh;">
-            <div Class="textobarsup">NADA</div>
+            <img src="../imagenes/AgroBitacora-logo.png" alt="AgroBitacora"></img>
             <a class="textobar" href="Admin.php">Gestionar Trabajadores</Tr></a>
             <a class="textobar" href="Gestion_Usua.php">Gestionar Usuarios</a>
             <a class="textobar" href="Gestion_Camp.php">Gestionar Campos</a>
             <a class="textobar" href="Productos.php">Configurar Valores y Productos</a>
             <a class="textobar" href="Reportes.php">Reportes Generales</a>
             <a class="textobar" href="Historial.php">Historial de Resgistro</a>
-            <a class="a-barra-salir" href="../logins/logout.php">Salir</a> 
+            <a class="a-barra-salir" href="../logins/logout.php">Cerrar Sesión</a>
         </div>
         <div class="container mt-4">
-            <!-- la tabla de los trabajadores -->
+           
              <div id="alertBox">
              
             <div class="container-fluid py-4 px-4">
                 <h4 class="mb-4"><i class="bi bi-graph-up-arrow me-2"></i>Reportes Generales</h4>
             
-            <div class="row g-3 mb-4" id="cardResumen">
+            <div class="row g-2 mb-3" id="cardResumen">
                 <div class="col-md-3">
-                    <div class="card text-center p-3 modal-vidrio">
-                        <i class="bi bi-people-fill" ></i>
+                    <div class="card text-center p-3 modal-vidrio tarjeta-cuadrada">
+                        <i class="bi bi-person-badge-fill text-white" ></i>
                             <h3 class="mt-2 mb-0" id="totalTrabajadores">0</h3>
                             <p class="text-muted mb-o texto-reportes">Trabajadores</p>
             </div>
             </div>
                 
                 <div class="col-md-3">
-                    <div class="card text-center p-3 modal-vidrio">
-                        <i class="bi bi-people-fill" ></i>
+                    <div class="card text-center p-3 modal-vidrio tarjeta-cuadrada">
+                        <i class="bi bi-house-fill text-white" ></i>
                             <h3 class="mt-2 mb-0" id="totalCampos">0</h3>
                             <p class="text-muted mb-o texto-reportes">Campos</p>
             </div>
             </div>
-
+           
                 <div class="col-md-3">
-                    <div class="card text-center p-3 modal-vidrio">
-                        <i class="bi bi-people-fill" ></i>
+                    <div class="card text-center p-3 modal-vidrio tarjeta-cuadrada">
+                        <i class="bi bi-box-seam-fill text-white" ></i>
                             <h3 class="mt-2 mb-0" id="totalProductos">0</h3>
                             <p class="text-muted mb-o texto-reportes">Productos</p>
             </div>
             </div>
 
              <div class="col-md-3">
-                    <div class="card text-center p-3 modal-vidrio">
-                        <i class="bi bi-people-fill" ></i>
+                    <div class="card text-center p-3 modal-vidrio tarjeta-cuadrada">
+                        <i class="bi bi-people-fill text-white" ></i>
                             <h3 class="mt-2 mb-0" id="totalUsuarios">0</h3>
                             <p class="text-muted mb-o texto-reportes">Usuarios</p>
 </div>
 </div>
 </div>
 
-<div class="row g-3 mb-4">
-    <div class="col-md-6">
-            <div class="card modal-vidrio p-3">
-                <h5><i class="bi bi-boxes me-2"></i>Productos con Stock Bajo</h5>
-                <div id="totalStockBajo">0</div>
-            </div>
-    </div>
-    <div class="col-md-6">
-            <div class="card modal-vidrio p-3">
-                <h5><i class="bi bi-boxes me-2"></i>Productos con Stock Alto</h5>
-                <div id="totalStockAlto">0</div>
-            </div>
-    </div>
-</div>
+
+
 
 
 

@@ -13,8 +13,8 @@ if(empty($trabajador)){
 }
 
 // Traer todos los cortes del trabajador del día
-$stmt = $Connection->prepare("SELECT *, DATE_FORMAT(create_at, '%d/%m/%Y') AS fecha_corte, DATE_FORMAT(create_at, '%H:%i:%s') AS hora
-    FROM cortes WHERE trabajador = ? AND DATE(create_at) = CURDATE() ORDER BY create_at ASC");
+$stmt = $Connection->prepare("SELECT cortes.*, producto.producto AS nom_producto, DATE_FORMAT(create_at, '%d/%m/%Y') AS fecha_corte, DATE_FORMAT(create_at, '%H:%i:%s') AS hora
+    FROM cortes INNER JOIN producto ON cortes.producto = producto.id WHERE cortes.trabajador = ? AND DATE(create_at) = CURDATE() ORDER BY create_at ASC");
 $stmt->bind_param("s", $trabajador);
 $stmt->execute();
 $resultado = $stmt->get_result();
@@ -78,7 +78,7 @@ foreach($cortes as $c){
     $pdf->Cell(10, 4, number_format($c['cantidad'], 2), 0, 0, 'L');
 
     $yInicio = $pdf->GetY();
-    $pdf->MultiCell(25, 4, mb_convert_encoding($c['producto'], 'ISO-8859-1', 'UTF-8'), 0, 'L');
+    $pdf->MultiCell(25, 4, mb_convert_encoding($c['nom_producto'], 'ISO-8859-1', 'UTF-8'), 0, 'L');
     $yFin = $pdf->GetY();
 
     $pdf->SetXY(40, $yInicio);

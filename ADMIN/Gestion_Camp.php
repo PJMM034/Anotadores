@@ -57,7 +57,7 @@ $resultA = $Connection->query($queryA);
                             </td>
                           </tr>
                      `);
-                    //aqui se muestra la informacion de los alumnos en la tabla
+                    //aqui se muestra la informacion de los usuarios en la tabla
                     $("#tblcampos tbody").html(row);
 
                        $.getJSON("../api/ListU.php", function(respU){
@@ -85,7 +85,7 @@ $resultA = $Connection->query($queryA);
                     let mmds = '<ul class="pagination">';
                      for(let i = 1; i <= resp.total_P; i++){
                        mmds += `<li class="page-item ${i === pagina ? 'active' : ''}">
-                                <a class="page-link" href="#" onclick="cargaCampos(${i})">${i}</a>
+                                <a class="page-link paginador" href="#" onclick="cargaCampos(${i})">${i}</a>
                             </li>`;
                             }
                             mmds += '</ul>';
@@ -197,7 +197,7 @@ $resultA = $Connection->query($queryA);
     
     <div class="d-flex">
         <div class="sidebar vidrio-sidebar d-flex flex-column bg-dark" style="width: 200px; height: 100vh;">
-            <div Class="textobarsup">NADA</div>
+            <img src="../imagenes/AgroBitacora-logo.png" alt="AgroBitacora"></img>
             <a class="textobar" href="Admin.php">Gestionar Trabajadores</Tr></a>
             <a class="textobar" href="Gestion_Usua.php">Gestionar Usuarios</a>
             <a class="textobar" href="Gestion_Camp.php">Gestionar Campos</a>

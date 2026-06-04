@@ -45,7 +45,7 @@ require_role('ADMIN');
                  let mmds = '<ul class="pagination">';
                      for(let i = 1; i <= resp.total_P; i++){
                        mmds += `<li class="page-item ${i === pagina ? 'active' : ''}">
-                                <a class="page-link" href="#" onclick="cargaUsuarios(${i})">${i}</a>
+                                <a class="page-link paginador" href="#" onclick="cargaUsuarios(${i})">${i}</a>
                             </li>`;
                             }
                             mmds += '</ul>';
@@ -123,7 +123,7 @@ require_role('ADMIN');
 <body>
     <div class="d-flex">
         <div class="sidebar vidrio-sidebar d-flex flex-column bg-dark" style="width: 200px; height: 100vh;">
-            <div class="textobarsup">NADA</div>
+            <img src="../imagenes/AgroBitacora-logo.png" alt="AgroBitacora"></img>
             <a class="textobar" href="Admin.php">Gestionar Trabajadores</a>
             <a class="textobar" href="Gestion_Usua.php">Gestionar Usuarios</a>
             <a class="textobar" href="Gestion_Camp.php">Gestionar Campos</a>
@@ -200,7 +200,7 @@ require_role('ADMIN');
         
         <div class="modal fade" id="modale" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
+                <div class="modal-content modal-vidrio">
                     <div class="modal-header">
                         <h5 class="modal-title">Editar Usuario</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>

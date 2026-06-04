@@ -62,11 +62,12 @@ $(document).ready(function(){
 
                     let lahora =  c.create_at.split(' ')[1];
                         cortelist += '<div class="border-bottom py-2">';
+                        //cortelist += '<a href="../PDF/GPDF.php?trabajador=' + c.trabajador + '" class="btn btn-sm btn-outline-danger mt-2">Ver PDF</a>';
                         // que muestra el nombre nombre del producto  y lo mando llamar con nombre_p solo para mostrar el nombre 
                         cortelist += '<div class="fw-semibold">' + c.nombre_p + '</div>';
                         // qui se muestra las candidas y hora de cada corte 
-                        cortelist += '<div class="text-secondary small">' + c.cantidad + ' Kg — ' + lahora + '</div>';
-                        cortelist += '<a href="../PDF/GPDF.php?trabajador=' + c.trabajador + '" class="btn btn-sm btn-outline-primary mt-2">Ver PDF</a>';
+                        cortelist += '<div class="text-secondary small text-light">' + c.cantidad + ' Kg — ' + lahora + '</div>';
+                        //cortelist += '<a href="../PDF/GPDF.php?trabajador=' + c.trabajador + '" class="btn btn-sm btn-outline-danger mt-2">Ver PDF</a>';
                         
                         cortelist += '</div>';
                     
@@ -80,15 +81,16 @@ $(document).ready(function(){
             if(inte == 0){
                 cerrar = 'show';
             }
-            mm += '<div class="accordion-item">';
+            mm += '<div class="accordion-item  acordeon-vidrio ">';
             mm += '<h2 class="accordion-header">';
-            mm += '<button class="accordion-button ' + bnt + '" type="button" data-bs-toggle="collapse" data-bs-target="#corte' + inte + '">';
+            mm += '<button class="accordion-button acordeon-vidrio-cabeza ' + bnt + '" type="button" data-bs-toggle="collapse" data-bs-target="#corte' + inte + '">';
             mm += trabajador.toUpperCase() + ' — Total: ' + t.total.toFixed(1);
             mm += '</button></h2>';
-            mm += '<div id="corte' + inte + '" class="accordion-collapse collapse ' + cerrar + '" data-bs-parent="#acordiondecortes">';
-            mm += '<div class="accordion-body p-2">' + cortelist + '</div>';
+            mm += '<div id="corte' + inte + '" class="accordion-collapse collapse' + cerrar + '" data-bs-parent="#acordiondecortes">';
+            // va hacer un boton para mandar a llamar el pdf para cada trabajar
+            let pdfBtn = '<a href="../PDF/GPDF.php?trabajador=' + trabajador + '" class="btn btn-sm btn-outline-danger mb-2">Ver PDF</a>';
+            mm += '<div class="accordion-body p-2">' + pdfBtn + cortelist + '</div>';
             mm += '</div></div>';
-            
             inte++;
             }
            
@@ -101,10 +103,12 @@ $(document).ready(function(){
 });
 </script>
 </head>
-<body class="bg-light">
-    <div class="container py-4">
+<body class="bg-lightm ">
+    <div class="container py-4 ">
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h1 class="h4 mb-0 text-dark">Cortes del día</h1>
+              <img src="../imagenes/AgroBitacora-logo.png" alt="AgroBitacora" style="height: 100px;"></img>
+            <h1 class="h4 mb-0 textosolo">Cortes del día</h1>
+          
             <a class="btn btn-outline-danger" href="Anotadores.php">Regresar</a>
         </div>
 

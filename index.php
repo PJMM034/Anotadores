@@ -31,7 +31,11 @@ if  ($error === '1') {
                 <div class="card contenedorlogin border-0 shadow-sm">
                     <div class="card-body p-4 p-md-5">
                      <form action="logins/login.php" method="post">
+                        <div class="d-flex justify-content-center ">
+                            <img src="imagenes/AgroBitacora-logo.png" alt="AgroBitacora" style="height: 150px;"></img>
+                        </div>
                           <div class="mb-3">
+                         
                             <label class="form-label" for="usuario">Usuario</label>
                             <input class="form-control" type="text" id="usuario" name="usuario" required placeholder="Introduce tu Usuario">
                           </div>
@@ -42,9 +46,6 @@ if  ($error === '1') {
                           <div class="d-grid gap-2 text-center">
                              <button  class="btn btn-login" type="submit">Iniciar Sesión</button>
                           </div>
-                          <p class="textinf text-center">
-                          para efecto de prueba no se validad usuarios ni contraseñas
-                        </p>
                      </form>
                     </div>
                 </div>

@@ -50,8 +50,8 @@ $resultA = $Connection->query($queryA);
                      //aqui empieza la recontruccion de la paginacion
                      let mmds = '<ul class="pagination">';
                      for(let i = 1; i <= resp.total_P; i++){
-                       mmds += `<li class="page-item ${i === pagina ? 'active' : ''}">
-                                <a class="page-link" href="#" onclick="cargaTrabajadores(${i})">${i}</a>
+                       mmds += `<li class="page-item  ${i === pagina ? 'active' : ''}">
+                                <a class="page-link paginador" href="#" onclick="cargaTrabajadores(${i})">${i}</a>
                             </li>`;
                             }
                             mmds += '</ul>';
@@ -136,14 +136,14 @@ $resultA = $Connection->query($queryA);
 <body>
     <div class="d-flex">
         <div class="sidebar vidrio-sidebar d-flex flex-column bg-dark" style="width: 200px; height: 100vh;">
-            <div Class="textobarsup">NADA</div>
-            <a class="textobar" href="Admin.php">Gestionar Trabajadores</Tr></a>
+            <img src="../imagenes/AgroBitacora-logo.png" alt="AgroBitacora"></img>
+            <a class="textobar" href="Admin.php">Gestionar Trabajadores</a>
             <a class="textobar" href="Gestion_Usua.php">Gestionar Usuarios</a>
             <a class="textobar" href="Gestion_Camp.php">Gestionar Campos</a>
             <a class="textobar" href="Productos.php">Configurar Valores y Productos</a>
             <a class="textobar" href="Reportes.php">Reportes Generales</a>
             <a class="textobar" href="Historial.php">Historial de Resgistro</a>
-            <a class="a-barra-salir" href="../logins/Logout.php">Cerrar Sesion</a>
+            <a class="a-barra-salir" href="../logins/logout.php">Cerrar Sesión</a>
         </div>
         <div class="container mt-4">
             <!-- la tabla de los trabajadores -->

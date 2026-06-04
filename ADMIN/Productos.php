@@ -49,7 +49,7 @@ $resultA = $Connection->query($queryA);
                       let mmds = '<ul class="pagination">';
                      for(let i = 1; i <= resp.total_P; i++){
                        mmds += `<li class="page-item ${i === pagina ? 'active' : ''}">
-                                <a class="page-link" href="#" onclick="cargaProductos(${i})">${i}</a>
+                                <a class="page-link paginador" href="#" onclick="cargaProductos(${i})">${i}</a>
                             </li>`;
                             }
                             mmds += '</ul>';
@@ -133,14 +133,14 @@ $resultA = $Connection->query($queryA);
 <body>
     <div class="d-flex">
         <div class="sidebar vidrio-sidebar d-flex flex-column bg-dark" style="width: 200px; height: 100vh;">
-            <div Class="textobarsup">NADA</div>
+            <img src="../imagenes/AgroBitacora-logo.png" alt="AgroBitacora"></img>
             <a class="textobar" href="Admin.php">Gestionar Trabajadores</Tr></a>
             <a class="textobar" href="Gestion_Usua.php">Gestionar Usuarios</a>
             <a class="textobar" href="Gestion_Camp.php">Gestionar Campos</a>
             <a class="textobar" href="Productos.php">Configurar Valores y Productos</a>
             <a class="textobar" href="Reportes.php">Reportes Generales</a>
             <a class="textobar" href="Historial.php">Historial de Resgistro</a>
-            <a class="a-barra-salir" href="../logins/logout.php">Salir</a> 
+            <a class="a-barra-salir" href="../logins/logout.php">Cerrar Sesión</a> 
         </div>
         <div class="container mt-4">
             <!-- la tabla de los trabajadores -->
@@ -211,10 +211,10 @@ $resultA = $Connection->query($queryA);
         
             <div class="modal fade" id="modale" tabindex="-1" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
+                    <div class="modal-conten modal-vidrio">
                         <div class="modal-header">
                             <h5 class="modal-title">Editar Producto</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" class="equis btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <form id="proform">
                             <div class="modal-body">
@@ -239,8 +239,8 @@ $resultA = $Connection->query($queryA);
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                <button type="submit" class="btn btn-primary">Guardar</button>
+                                <button type="button" class="btn btn-salir" data-bs-dismiss="modal">Cancelar</button>
+                                <button type="submit" class="btn pulse-effect">Guardar</button>
                             </div>
                         </form>
                     </div>
