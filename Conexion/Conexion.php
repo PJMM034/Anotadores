@@ -1,8 +1,8 @@
 <?php
 $Hostname = "localhost";
-$User = "root";
-$Pass = "victorteran";
-$DB = "anotadores";
+$User = "u131488081_root";
+$Pass = "Rm!r3z034";
+$DB = "u131488081_Anotadores";
 $Connection = new mysqli($Hostname,$User,$Pass,$DB);
 
 if ($Connection->connect_errno) {
