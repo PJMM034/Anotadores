@@ -21,6 +21,43 @@ $resultA = $Connection->query($queryA);
     <script src="../js/jquery-4.0.0.js"></script>
 
 <script>
+
+    let paginaActual = 1;
+
+     function cargaTrabajadores(pagina = 1){
+                paginaActual = pagina;
+                $.getJSON ("../api/ListT.php",{pagina:pagina} ,function(resp){
+                    // Procesar los datos recibidos
+                   if(!resp.ok) {
+                     showAlert('danger', resp.msg || 'datos');
+                     //return;
+                   }
+                        const row = resp.data.map(s =>`
+                          <tr class="tabladiseño"> 
+                            <td>${s.id_t}</td>
+                            <td>${s.nombre}</td>
+                            
+                            <td>${s.estado}</td>
+                            <td class="text-end text-center">
+                              <button class="btn justify-center-content btn-sm btn-outline-primary me-1 btn-edit edi" data-id_t="${s.id_t}" title="Editar">
+                             <i class="bi bi-pencil"></i>
+                              </button>
+                          </td>
+                          </tr>
+                     `);
+                    //aqui se muestra la informacion de los alumnos en la tabla
+                    $("#tbltrabajadores tbody").html(row);
+                     //aqui empieza la recontruccion de la paginacion
+                     let mmds = '<ul class="pagination">';
+                     for(let i = 1; i <= resp.total_P; i++){
+                       mmds += `<li class="page-item  ${i === pagina ? 'active' : ''}">
+                                <a class="page-link paginador" href="#" onclick="cargaTrabajadores(${i})">${i}</a>
+                            </li>`;
+                            }
+                            mmds += '</ul>';
+                            $("#pagination").html(mmds);
+                });
+            }
       
       $(document).ready(function(){
         const modaled = new bootstrap.Modal(document.getElementById('modaled'));
@@ -35,31 +72,7 @@ $resultA = $Connection->query($queryA);
 
             } 
 
-            function cargaTrabajadores(){
-                $.getJSON ("../api/ListT.php", function(resp){
-                    // Procesar los datos recibidos
-                   if(!resp.ok) {
-                     showAlert('danger', resp.msg || 'datos');
-                     //return;
-                   }
-                        const row = resp.data.map(s =>`
-                          <tr class="tabladiseño"> 
-                            <td>${s.id_t}</td>
-                            <td>${s.nombre}</td>
-                            <td>${s.puesto}</td>
-                            <td>${s.estado}</td>
-                            <td class="text-end text-center">
-                              <button class="btn justify-center-content btn-sm btn-outline-primary me-1 btn-edit" data-id_t="${s.id_t}" title="Editar">
-                             <i class="bi bi-pencil"></i>
-                              </button>
-                          </td>
-                          </tr>
-                     `);
-                    //aqui se muestra la informacion de los alumnos en la tabla
-                    $("#tbltrabajadores tbody").html(row);
-                     
-                });
-            }
+          
 
              $(document).on("click",".btn-edit", function(){
                   //alert("diste click en editar");
@@ -76,13 +89,30 @@ $resultA = $Connection->query($queryA);
                    const data = resp.data;
                     $("#edit-id_t").val(data.id_t);
                     $("#edit-nombre").val(data.nombre);
-                    $("#edit-puesto").val(data.puesto);
+                    
                     $("#edit-estado").val(data.estado);
 
                     $("#modaled").modal('show');
                   });
                   
             });
+
+             $("#form").on("submit", function(e){
+                e.preventDefault();
+                $.post("../PHP/GuardarT.php",$(this).serialize(), function(resp){
+                try{resp = JSON.parse(resp);} catch(e){resp={ok:false, msg:'Error al editar'};}
+                if(!resp.ok) {
+                     showAlert('danger', resp.msg || 'Este trabajador ya existe');
+                     $("#form")[0].reset();
+                     return;
+                   }
+                   $("#modalt").modal('hide');
+                   showAlert('success', 'Trabajador registrado correctamente');
+                    $("#form")[0].reset();
+                   cargaTrabajadores();
+                });
+            });
+
 
             $("#formT").on("submit", function(e){
                 e.preventDefault();
@@ -106,14 +136,14 @@ $resultA = $Connection->query($queryA);
 <body>
     <div class="d-flex">
         <div class="sidebar vidrio-sidebar d-flex flex-column bg-dark" style="width: 200px; height: 100vh;">
-            <div Class="textobarsup">NADA</div>
-            <a class="textobar" href="Admin.php">Gestionar Trabajadores</Tr></a>
+            <img src="../imagenes/agrobitacora-logo.png" alt="AgroBitacora"></img>
+            <a class="textobar" href="Admin.php">Gestionar Trabajadores</a>
             <a class="textobar" href="Gestion_Usua.php">Gestionar Usuarios</a>
             <a class="textobar" href="Gestion_Camp.php">Gestionar Campos</a>
             <a class="textobar" href="Productos.php">Configurar Valores y Productos</a>
-            <a class="textobar" href="#">Reportes Generales</a>
-            <a class="textobar" href="#">Historial de Resgistro</a>
-            <a class="a-barra-salir" href="../logins/Logout.php">Cerrar Sesion</a>
+            <a class="textobar" href="Reportes.php">Reportes Generales</a>
+            <a class="textobar" href="Historial.php">Historial de Resgistro</a>
+            <a class="a-barra-salir" href="../logins/logout.php">Cerrar Sesión</a>
         </div>
         <div class="container mt-4">
             <!-- la tabla de los trabajadores -->
@@ -126,8 +156,7 @@ $resultA = $Connection->query($queryA);
                         <th>ID</th>
                         <th>Trabajadores</th>
                         <th>Estado</th>
-                        <th>Puesto</th>
-                         <th>Editar</th>
+                        <th>Editar</th>
                     </tr>
                 </thead>
                     <tbody>
@@ -138,8 +167,9 @@ $resultA = $Connection->query($queryA);
                         </tr>
                     </tbody>
             </table>
+            <div id="pagination" class="d-flex justify-content-center mt-3"></div> 
             <div class="container mt-3 text-center">
-                <button class="btn pulse-effect btn-primary px-5" data-bs-toggle="modal" data-bs-target="#modalt">Añadir Producto</button>
+                <button class="btn pulse-effect btn-primary px-5" data-bs-toggle="modal" data-bs-target="#modalt">Añadir Trabajador</button>
             </div>
             <div class="modal fade" id="modalt" tabindex="-1" aria-labelledby="modalt" aria-hidden="true">
             <div class="modal-dialog">
@@ -149,7 +179,7 @@ $resultA = $Connection->query($queryA);
                     <button type="button" class="btn-close equis" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="../PHP/GuardarT.php" method="post" id="form">
+                    <form method="post" id="form">
                         <div class="mb-3">
                             <label for="nombre" class="form-label">Nombre del Trabajador</label>
                             <input type="text" class="form-control" id="nombre" name="nombre" required placeholder="Introduce el nombre del trabajador Completo">
@@ -158,15 +188,7 @@ $resultA = $Connection->query($queryA);
                             <label for="estado" class="form-label">Estado</label>
                             <select class="form-select" name="estado" id="estado " required>
                             <option value="Activo">Activo</option>
-                            <option value="Inativo">Inativo</option>
-                            </select>
-                        </div>
-                         <div class="md-form mb-4">
-                            <label for="puesto" class="form-label">Puesto</label>
-                            <select class="form-select" name="puesto" id="puesto " required>
-                            <option value="">Ingresar el puesto</option>
-                            <option value="a">Activo</option>
-                            <option value="b">Inativo</option>
+                            <option value="Inactivo">Inactivo</option>
                             </select>
                         </div>
                     </form>
@@ -174,7 +196,7 @@ $resultA = $Connection->query($queryA);
                 <div class="modal-footer">
                     <button type="button " class="btn btn-salir" data-bs-dismiss="modal">Salir</button>
                     <!-- uso el tipo submit para que envie el formulario -->
-                    <button type="submit " form="form" class="btn pulse-effect">Guardar</button>
+                    <button type="submit " form="form" class="btn pulse-effect" data-bs-dismiss="modal">Guardar</button>
                     
                 </div>
                 </div>
@@ -182,12 +204,13 @@ $resultA = $Connection->query($queryA);
             </div>
         </div>
 
+
              <div class="modal fade" id="modaled" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog">
-                <div class="modal-content">
+                <div class="modal-content modal-vidrio">
                 <div class="modal-header">
                     <h1 class="modal-title ">Agregar Trabajador</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close equis" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form id="formT">
@@ -200,21 +223,13 @@ $resultA = $Connection->query($queryA);
                             <label for="edit-estado" class="form-label">Estado</label>
                             <select class="form-select" name="estado" id="edit-estado" required>
                             <option value="Activo">Activo</option>
-                            <option value="Inativo">Inativo</option>
-                            </select>
-                        </div>
-                         <div class="md-form mb-4">
-                            <label for="edit-puesto" class="form-label">Puesto</label>
-                            <select class="form-select" name="puesto" id="edit-puesto" required>
-                            <option value="">Ingresar el puesto</option>
-                            <option value="a">Activo</option>
-                            <option value="b">Inativo</option>
+                            <option value="Inactivo">Inactivo</option>
                             </select>
                         </div>
                         <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Salir</button>
+                        <button type="button" class="btn btn-salir" data-bs-dismiss="modal">Salir</button>
                         <!-- uso el tipo submit para que envie el formulario -->
-                        <button type="submit" form="formT" class="btn btn-primary">Guardar</button>
+                        <button type="submit" form="formT" class="btn pulse-effect">Guardar</button>
                         
                          </div>
                     </form>

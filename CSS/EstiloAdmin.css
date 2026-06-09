@@ -1,6 +1,6 @@
 /* es para darle diseno a los botones a */
 .sidebar a{
-    color: rgb(13, 54, 5);
+    color: rgb(255, 255, 255);
     text-decoration: none;
     font-family: 'excalibur', cursive;
     padding: 12px 20px;
@@ -23,42 +23,32 @@
 
 /*Diseño transparentoso tipo vidrio que me recuerda a las paginas de antes de la barra lateral*/
 .vidrio-sidebar {
-    background: rgba(245, 252, 229, 0.195) !important;
+    background: rgba(232, 252, 229, 0.141) !important;
+    box-shadow: 1px 1px 1px rgba(193, 240, 190, 0.7);
+    border: 1px solid rgba(158, 247, 152, 0.7) !important;
     backdrop-filter: blur(12px) !important;
     -webkit-backdrop-filter: blur(12px) !important;
-
-    box-shadow: 1px 1px 1px rgba(193, 240, 190, 0.7) !important;
-
-    border: 1px solid rgba(193, 240, 190, 0.7) !important;
     border-radius: 10px !important;
 }
 
 /*El texto que esta en la parte superiro de la barra lateral*/
-.textobarsup {
-    color: rgb(15, 33, 2) !important;
-    font-family: 'excalibur', cursive !important;
-    font-size: 25px;
-}
+
 
 /*Texto de la barra lateral*/
 .textobar {
-    color: rgb(15, 33, 2) !important;
+    color: rgb(255, 255, 255) !important;
     font-family: 'excalibur', cursive !important;
-    transition: background-color 0.3s ease-in-out;
-    transition: font-size 0.3s ease-in-out;
-    transition: box-shadow 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out !important;
 }
 
 /*Texto de la barra lateral al pasar el mouse*/
 .textobar:hover {
-    background-color: rgba(33, 237, 255, 0.5) !important;
+    background-color: rgba(0, 255, 162, 0.5) !important;
     font-family: 'excalibur', cursive !important;
     font-size: 16px;
-    box-shadow: 0 0 10px #21edff;
+    box-shadow: 0 0 10px #21ff4d;
     padding: 12px 20px;
-    transition: background-color 0.3s ease-in-out;
-    transition: font-size 0.3s ease-in-out;
-    transition: box-shadow 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out !important;
 }
 
 /*Este es para darle un efecto y color diferente al boton de cerrar sesion de la barra*/
@@ -71,29 +61,44 @@
     cursor: pointer;
     border-radius: 5px;
     border: none;
-    transition: background-color 0.3s ease-in-out;
-    transition: font-size 0.3s ease-in-out;
-    transition: box-shadow 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out !important;
 }
 
 /* este es para darle efecto al boton de cerrar sesion de la barra al pasar el mouse*/
 .a-barra-salir:hover {
-    background-color: rgba(255, 0, 30, 0.5) !important;
+    background-color: rgba(255, 255, 255, 0.5) !important;
     color: rgb(85, 9, 9);
     font-size: 16px;
-    box-shadow: 0 0 10px rgb(255, 0, 30);
+    box-shadow: 0 0 10px rgb(255, 255, 255);
     padding: 10px 20px;
-    transition: background-color 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out !important;
+    transition: font-size 0.3s ease-in-out !important;
+    transition: box-shadow 0.3s ease-in-out !important;
 }
 
 /*Fondo de la pagina y demas decoraciones*/
 body {
-    background-image: url("../Imagenes/fondo.jpg");
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-    background-attachment: fixed;
-    height: 100vh;
+  margin: 0;
+  min-height: 100vh;
+  
+  /* Color base por si falla el degradado */
+  background-color: #000000;
+  
+  /* El degradado radial */
+  background-image: radial-gradient(circle, #008000 0%, #000000 100%);
+  
+  
+  /* Fija el fondo al viewport (la pantalla), evitando que se mueva al hacer scroll */
+  background-attachment: fixed;
+  
+  /* Asegura que el fondo no se repita en mosaico */
+  background-repeat: no-repeat;
+  
+  /* Mantiene el degradado perfectamente centrado en la pantalla */
+  background-position: center;
+  
+  /* Color de texto legible */
+  color: white !important; 
 }
 
 /*Responsable del diseño de las tablas*/
@@ -103,7 +108,9 @@ body {
     padding: 12px 15px !important;
     vertical-align: middle;
     border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.5s ease-in-out;
+    transition: color 0.5s ease-in-out;
+    color:#ffffff !important;
 }
 
 
@@ -120,28 +127,109 @@ body {
 /* Cambia el color de la fila cuando el cursor está encima */
 .tabla-transparente tbody tr:hover td {
     background-color: rgba(255, 255, 255, 0.6) !important; /* Se ilumina más fuerte */
-    transition: background-color 0.3s ease;
+    color:#000000 !important;
+    transition: background-color 0.5s ease-in-out;
+    transition: color 0.5s ease-in-out;
 }
 
 /*Para colorear las filas pares*/
 .tabla-transparente tbody tr:nth-child(even) td {
     background-color: rgba(255, 255, 255, 0.063) !important; /* Filas pares más transparentes */
+    transition: background-color 0.5s ease-in-out;
+    transition: color 0.5s ease-in-out;
 }
 
 /*Para colorear las filas pares al pasar el mouse*/
 .tabla-transparente tbody tr:nth-child(even):hover td {
     background-color: rgba(255, 252, 252, 0.471) !important; /* Filas pares más transparentes */
+    color:#000000 !important;
+    transition: background-color 0.5s ease-in-out;
+    transition: color 0.5s ease-in-out;
 }
 
 /*Para colorear las filas pares al hacer clic*/
 .tabla-transparente tbody tr:nth-child(even):active td {
     background-color: rgba(193, 240, 190, 0.7) !important; /* Filas pares más transparentes */
+    transition: background-color 0.5s ease-in-out;
+    transition: color 0.5s ease-in-out;
 }
 
 /*Para colorear las filas cuando se hace clic*/
 .tabla-transparente tbody tr:active td {
     background-color: rgba(193, 240, 190, 0.7) !important;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.5s ease-in-out;
+    transition: color 0.5s ease-in-out;
+}
+
+/* Cambia el estilo de las opciones en forma de lista*/
+.tabla-transparente select.form-select option {
+    background-color: #2b362c; 
+    color: #ffffff;
+    padding: 10px;
+}
+
+
+/* Estilo de la seleccion de la tabla*/
+.tabla-transparente select{
+    background-color: rgba(178, 212, 212, 0.651);
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+    font-size: 16px;
+    color: #201c1c;
+    transition: background-color 0.3s ease-in-out;
+}
+
+/* Estilo al pasar el mouse por la seleccion de la tabla*/
+.tabla-transparente select:hover{
+      background-color: rgba(181, 252, 174, 0.651);
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+    font-size: 16px;
+    color: #201c1c;
+    box-shadow: 0 0 5px rgba(181, 252, 174, 0.651);
+    transition: background-color 0.3s ease-in-out;
+}
+
+/* Estilo al hacer clic por la seleccion de la tabla*/
+.tabla-transparente select:focus{
+    background-color: rgba(17, 255, 0, 0.651);
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+    font-size: 16px;
+    color: #ffffff;
+    box-shadow: 0 0 20px rgba(17, 255, 0, 0.651);
+    transition: background-color 0.3s ease-in-out;
+}
+
+/* Estilo del salto de pagina de las tablas*/
+.paginador {
+    background-color: rgba(255, 255, 255, 0.2) !important;
+    color: #ffffff !important;  
+    border-color: #9ef8a8 !important;  
+}
+
+.paginador:hover {
+    background-color: rgba(255, 255, 255, 0.5) !important;
+    color: #000000 !important;  
+    border-color: #9ef8a8 !important;  
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5) !important;
+}
+
+.paginador:active {
+    background-color: rgba(193, 240, 190, 0.7) !important;
+    color: #000000 !important;  
+    border-color: #9ef8a8 !important;  
+    box-shadow: 0 0 10px rgba(193, 240, 190, 0.7) !important;
+}
+
+.paginador:focus {
+    background-color: rgba(17, 255, 0, 0.859) !important;
+    color: #ffffff !important;  
+    border-color: #51f965 !important;  
+    box-shadow: 0 0 20px rgba(17, 255, 0, 0.651) !important;
 }
 
 
@@ -154,8 +242,8 @@ body {
     padding: 10px 20px;
     cursor: pointer;
     border-radius: 5px;
-    background-color: rgba(3, 255, 49, 0.2);
-    transition: background-color 0.3s ease-in-out;
+    background-color: rgba(3, 255, 49, 0.2) !important;
+    transition: background-color 0.3s ease-in-out !important;
     backdrop-filter: blur(5px);
 }
 
@@ -167,7 +255,7 @@ body {
     font-size: 16px;
     box-shadow: 0 0 10px rgb(111, 255, 0);
     padding: 10px 20px;
-    transition: background-color 0.3s ease-in-out;
+    transition: background-color 0.3s ease-in-out !important;
     
 }
 
@@ -181,7 +269,7 @@ body {
     padding: 10px 20px;
     box-shadow: 0 0 10px rgb(255, 255, 255) !important;
     max-width: 500px;
-    transition: background-color 0.3s ease-in-out;
+    transition: background-color 0.3s ease-in-out !important;
 }
 
 /*Efecto para los botones de salir siguiendo la logica de los otros botones*/
@@ -194,7 +282,7 @@ body {
     cursor: pointer;
     border-radius: 5px;
     border: none;
-    transition: background-color 0.3s ease-in-out;
+    transition: background-color 0.3s ease-in-out !important;
 }
 
 /*Efecto al pasar el mouse por los botones de salir*/
@@ -206,6 +294,7 @@ body {
     font-size: 16px;
     box-shadow: 0 0 20px rgb(255, 0, 0);
     padding: 10px 20px;
+    transition: background-color 0.3s ease-in-out !important;
 }
 
 /*Efecto al presionar los botones de salir*/
@@ -216,19 +305,61 @@ body {
     font-size: 16px;
     padding: 10px 20px;
     box-shadow: 0 0 10px rgb(255, 255, 255);
-    transition: background-color 0.3s ease-in-out;
+    transition: background-color 0.3s ease-in-out !important;
     
 }
 
-/*Modal transparentosa estilo vidrio*/
-.modal-vidrio {
-    background: rgba(245, 252, 229, 0.195);
+
+.tarjeta-cuadrada {
+    aspect-ratio: 1 / 1 !important; /* Mantiene la tarjeta cuadrada */
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important; 
+    align-items: center !important;
+}
+
+.textosolo {
+    color:#fff !important;
+    font-family: 'excalibur', cursive !important;
+}
+
+.acordeon-vidrio {
+    background: rgba(232, 252, 229, 0.141) !important;
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
 
     box-shadow: 1px 1px 1px rgba(193, 240, 190, 0.7);
 
-    border: 1px solid rgba(193, 240, 190, 0.7);
+    border: 1px solid rgba(158, 247, 152, 0.7) !important;
+}
+
+.acordeon-vidrio a {
+    color:#fff !important;
+    font-family: 'excalibur', cursive !important;
+}
+
+.accordion-body {
+    color:#fff !important;
+    font-family: 'excalibur', cursive !important;
+}
+
+.acordeon-vidrio-cabeza {
+    background-color: rgba(0, 0, 0, 0.3) !important; /* Encabezados un poco más visibles */
+    color: rgb(250, 255, 246) !important;
+    font-family: 'excalibur', cursive !important;
+    font-size: 16px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+/*Modal transparentosa estilo vidrio*/
+.modal-vidrio {
+    background: rgba(232, 252, 229, 0.141) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    box-shadow: 1px 1px 1px rgba(193, 240, 190, 0.7);
+
+    border: 1px solid rgba(158, 247, 152, 0.7) !important;
     border-radius: 10px;
 
     padding: 20px;
@@ -237,6 +368,54 @@ body {
     text-align: center;
 }
 
+/* Para que el texto principal de la modal sea blando y visible*/
+.modal-vidrio h1, .modal-vidrio label, .modal-vidrio p, .modal-vidrio h3, .modal-vidrio h2, .modal-vidrio h4, .modal-vidrio h5, .modal-vidrio h6 {
+    color:#fff !important;
+}
+
+/* Agrupe varios elementos para darles el mismo estilo a la vez*/
+.modal-vidrio input, .modal-vidrio select, .modal-vidrio{
+    background-color: rgba(178, 212, 212, 0.651);
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+    font-size: 16px;
+    color: #201c1c;
+    transition: background-color 0.3s ease-in-out;
+}
+
+/*Cambiar el estilo de los inputs (donde escribes la informacion) y los selects (donde eliges la informacion en forma de lista)*/
+.modal-vidrio input:hover, .modal-vidrio select:hover {
+    background-color: rgba(181, 252, 174, 0.651);
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+    font-size: 16px;
+    color: #201c1c;
+    box-shadow: 0 0 5px rgba(181, 252, 174, 0.651);
+    transition: background-color 0.3s ease-in-out;
+}
+
+/*Cambiar el estilo de los inputs (donde escribes la informacion) y los selects (donde eliges la informacion en forma de lista)*/
+.modal-vidrio input:focus, .modal-vidrio select:focus {
+    background-color: rgba(255, 255, 255, 0.651);
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+    font-size: 16px;
+    color: #201c1c;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+    transition: background-color 0.3s ease-in-out;
+}
+
+/* Cambia el estilo de las opciones en forma de lista*/
+.modal-vidrio select.form-select option {
+    background-color: #2b362c; 
+    color: #ffffff;
+    padding: 10px;
+}
+
+/* Diseño para la equis de la parte superior derecha de la modal*/
 .equis {
     background-color: rgba(255, 33, 33, 0.289);
     color: rgb(255, 255, 255);
@@ -251,22 +430,113 @@ body {
 
 /*Efecto al pasar el mouse por los botones de salir*/
 .equis:hover {
-    background-color: rgb(255, 0, 0, 0.5);
+    background-color: rgba(255, 0, 0, 0.5);
     color: rgb(255, 255, 255);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     font-size: 16px;
-    box-shadow: 0 0 20px rgb(255, 0, 0);
-    treansition: background-color 0.3s ease-in-out;
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+    transition: background-color 0.3s ease-in-out;
 }
 
 /*Efecto al presionar los botones de salir*/
 .equis:active {
     transform: scale(0.95);
     background-color: rgba(255, 255, 255, 0.9) !important; 
-    color: rgb(255, 0, 0) !important;
+    color: rgba(255, 0, 0, 0.9) !important;
     font-size: 16px;
-    box-shadow: 0 0 10px rgb(255, 255, 255);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.9);
     transition: background-color 0.3s ease-in-out;
     
+}
+
+.edi {
+    background-color: rgba(33, 100, 255, 0.289) !important;
+    color: rgb(255, 255, 255) !important;
+    font-family: 'excalibur', cursive !important;
+    font-size: 16px !important;
+    padding: 10px 20px !important;
+    cursor: pointer !important;
+    border-radius: 5px !important;
+    border: none !important;
+    transition: background-color 0.3s ease-in-out !important;
+}
+
+/*Efecto al pasar el mouse por los botones de salir*/
+.edi:hover {
+    background-color: rgba(0, 106, 255, 0.5) !important;
+    color: rgb(255, 255, 255) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    font-size: 16px !important;
+    box-shadow: 0 0 20px rgba(0, 106, 255) !important;
+    transition: background-color 0.3s ease-in-out !important;
+}
+
+/*Efecto al presionar los botones de salir*/
+.edi:active {
+    transform: scale(0.95) !important;
+    background-color: rgba(255, 255, 255, 0.9) !important; 
+    color: rgb(0, 21, 255) !important;
+    font-size: 16px !important;
+    box-shadow: 0 0 10px rgb(255, 255, 255) !important;
+    transition: background-color 0.3s ease-in-out !important;
+    
+}
+
+.imp {
+    background-color: rgba(40, 255, 33, 0.289) !important;
+    color: rgb(255, 255, 255) !important;
+    font-family: 'excalibur', cursive !important;
+    font-size: 16px !important;
+    padding: 10px 20px !important;
+    cursor: pointer !important;
+    border-radius: 5px !important;
+    border: none !important;
+    transition: background-color 0.3s ease-in-out !important;
+}
+
+/*Efecto al pasar el mouse por los botones de salir*/
+.imp:hover {
+    background-color: rgba(40, 255, 33, 0.5) !important;
+    color: rgb(255, 255, 255) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    font-size: 16px !important;
+    box-shadow: 0 0 20px rgba(40, 255, 33, 0.5) !important;
+    transition: background-color 0.3s ease-in-out !important;
+}
+
+/*Efecto al presionar los botones de salir*/
+.imp:active {
+    transform: scale(0.95) !important;
+    background-color: rgba(255, 255, 255, 0.9) !important; 
+    color: rgba(40, 255, 33, 0.9) !important;
+    font-size: 16px !important;
+    box-shadow: 0 0 10px rgb(255, 255, 255) !important;
+    transition: background-color 0.3s ease-in-out !important;
+    
+}
+
+.autocomplete-dropdown {
+    display: none;
+    position: absolute;
+    width: 100%;
+    background: #22e242;
+    border: 1px solid #4fef39;
+    border-radius: 0 0 6px 6px;
+    z-index: 1000;
+    max-height: 180px;
+    overflow-y: auto;
+}
+
+.autocomplete-item {
+    padding: 10px 14px;
+    font-size: 14px;
+    cursor: pointer;
+    color: #212529;
+}
+
+.autocomplete-item:hover {
+    background: #26e061;
 }

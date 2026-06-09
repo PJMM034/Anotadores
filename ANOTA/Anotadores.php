@@ -19,7 +19,10 @@ $aguas = $_GET['aguas'] ?? '';
      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <script src="../js/jquery-4.0.0.js"></script>
+    <link rel="stylesheet" href="../CSS/EstiloAdmin.css">
 
+
+    
     <script>
         $(document).ready(function(){
              function showAlert(type, msg) {
@@ -36,11 +39,46 @@ $aguas = $_GET['aguas'] ?? '';
                      return;
                 }
                 const data = resp.data;
-                $('#producto').val(data.producto);
-                $('#nombre').val(data.ubicacion);
-                $('#valor').val(data.valor);
+                $('#producto').val(data.producto); 
+                $('#nombre').val(data.ubicacion);    
+                $('#valor').val(data.valor);         
+                $('#id_producto').val(data.id_producto); 
+                $('#id_c').val(data.id_c);            
+                
+                $('#cantidad').text('cantidad por '+ data.unidad + '*');
 
             });
+
+            // aqui cargo los tarabajadores para el datalist de para autocompletado
+            
+                 let cortadoresData = [];
+                $.getJSON("../api/ListT.php", function(resp){
+                    if(!resp.ok){ showAlert('danger', resp.msg || 'Error'); return; }
+                    cortadoresData = resp.data;
+                });
+
+                $('#cortador').on('input', function(){
+                    let q = $(this).val().toLowerCase();
+                    let lista = $('#cortadoresList');
+                    if(!q){ lista.hide(); return; }
+
+                    let f = cortadoresData.filter(c => c.nombre.toLowerCase().includes(q));
+                    if(!f.length){ lista.hide(); return; }
+
+                    lista.html(f.map(c => '<div class="autocomplete-item" data-nombre="' + c.nombre + '">' + c.nombre + '</div>').join('')).show();
+                });
+
+                $(document).on('click', '.autocomplete-item', function(){
+                    $('#cortador').val($(this).data('nombre'));
+                    $('#cortadoresList').hide();
+                });
+
+                $(document).on('click', function(e){
+                    if(!$(e.target).closest('#cortador, #cortadoresList').length)
+                        $('#cortadoresList').hide();
+                });
+
+
                $("#formcorte").on("submit", function(e){
                 // el preventDefault es para evitar que mande el formulario    
                  e.preventDefault();
@@ -63,44 +101,51 @@ $aguas = $_GET['aguas'] ?? '';
 <body class="bg-light">
     <div class="container">
         <div class="row g-0">
-                <div class="container py-4">
+                <div class="container py-4 modal-vidrio">
                     <div class="d-flex justify-content-between align-items-center mb-3">
+                        <img src="../imagenes/agrobitacora-logo.png" alt="AgroBitacora" style="height: 100px;"></img>
                         <h1 class="h4 mb-0 text-dark">Registros de Cortes</h1>
-                        <div>
-                            <a class="btn btn-outline-dark" href="ListaD.php">Cortes del día</a>
-                            <a class="btn btn-outline-danger" href="../logins/logout.php">Cerrar sesion</a>
+                        <div class="d-flex gap-2">
+                            <a class="pulse-effect" href="ListaD.php">Cortes del día</a>
+
+                            <a class="btn-salir" href="../logins/logout.php">Cerrar sesion</a>
                         </div>
                     </div>
                     <div id="alertBox">
         
                     </div>
-                    <div class="card border-0 shadow-sm">
+                    <div class="card border-0 shadow-sm modal-vidrio">
                         <div class="card-body p-4">
                             <form id="formcorte">
                                 <div class="mb-3">
                                     <label class="form-label fw-semibold" for="producto">Producto *</label>
-                                    <input class="form-control" type="text" id="producto" name="producto" required readonly>
+                                    <input class="form-control" type="hidden" id="id_producto" name="id_producto"readonly>
+                                    <input class="form-control" type="text" id="producto" name="producto"readonly>
                                 </div>
 
                                 <div class="mb-3">
                                     <label class="form-label fw-semibold" for="nombre">Ubicación *</label>
-                                    <input class="form-control" type="text" id="nombre" name="nombre" required readonly>
+                                    <input class="form-control" type="hidden" id="id_c" name="id_c" readonly>
+                                    <input class="form-control" type="text" id="nombre" name="nombre" readonly>
                                 </div> 
 
                                 <div class="mb-3">
                                     <label class="form-label fw-semibold" for="cortador">Cortador *</label>
-                                    <input class="form-control" type="text" id="cortador" name="cortador" required placeholder="Escriba el nombre del empleado">
+                                    <input class="form-control" type="text" id="cortador" name="cortador" required placeholder="Escriba el nombre del empleado"
+                                     autocomplete="off">
+                                    <div id="cortadoresList" class="autocomplete-items acordeon-vidrio"></div>
+
                                 </div>
                                 <div class="mb-4">
                                     <label class="form-label fw-semibold" for="valor">Precio del producto *</label>
                                     <input class="form-control" type="number" id="valor" name="valor" required placeholder="0" min="0" style="max-width: 150px;" readonly>
                                 </div>
                                 <div class="mb-4">
-                                    <label class="form-label fw-semibold" for="cantidad">Cantidad *</label>
+                                    <label class="form-label fw-semibold" id="cantidad"  for="cantidad">Cantidad*</label>
                                     <input class="form-control" type="number" id="cantidad"  name="cantidad" required placeholder="0" min="0" style="max-width: 150px;">
                                 </div>
                                 <div class="text-center">
-                                <button class="btn btn-primary" type="submit">Guardar Corte</button>
+                                <button class="pulse-effect" type="submit">Guardar Corte</button>
                                 </div>
                             </form>
                         </div>

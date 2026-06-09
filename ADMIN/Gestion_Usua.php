@@ -17,7 +17,42 @@ require_role('ADMIN');
     <script src="../js/jquery-4.0.0.js"></script>
 
 <script>
+    
+    let paginaActual = 1;
 
+    function cargaUsuarios(pagina = 1){
+            paginaActual = pagina;
+            $.getJSON("../api/ListU.php", {pagina: pagina},function(resp){
+                if(!resp.ok) {
+                    showAlert('danger', resp.msg || 'Error al cargar usuarios');
+                    return;
+                }
+                const row = resp.data.map(s =>`
+                    <tr>
+                        <td>${s.id_u}</td>
+                        <td>${s.usuario}</td>
+                        <td>${s.rol}</td>
+                        <td>${s.estado}</td>
+                        <td class="text-end">
+                            <button class="btn btn-sm btn-outline-primary me-1 btn-edit edi" data-id="${s.id_u}" title="Editar">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `);
+                $("#tblusuarios tbody").html(row);
+
+                 let mmds = '<ul class="pagination">';
+                     for(let i = 1; i <= resp.total_P; i++){
+                       mmds += `<li class="page-item ${i === pagina ? 'active' : ''}">
+                                <a class="page-link paginador" href="#" onclick="cargaUsuarios(${i})">${i}</a>
+                            </li>`;
+                            }
+                            mmds += '</ul>';
+                            $("#pagination").html(mmds);
+
+            });
+        }
 
     $(document).ready(function(){
         const modale = new bootstrap.Modal(document.getElementById('modale'));
@@ -32,28 +67,7 @@ require_role('ADMIN');
 
             } 
 
-        function cargaUsuarios(){
-            $.getJSON("../api/ListU.php", function(resp){
-                if(!resp.ok) {
-                    showAlert('danger', resp.msg || 'Error al cargar usuarios');
-                    return;
-                }
-                const row = resp.data.map(s =>`
-                    <tr>
-                        <td>${s.id_u}</td>
-                        <td>${s.usuario}</td>
-                        <td>${s.rol}</td>
-                        <td>${s.estado}</td>
-                        <td class="text-end">
-                            <button class="btn btn-sm btn-outline-primary me-1 btn-edit" data-id="${s.id_u}" title="Editar">
-                                <i class="bi bi-pencil"></i>
-                            </button>
-                        </td>
-                    </tr>
-                `);
-                $("#tblusuarios tbody").html(row);
-            });
-        }
+        
 
         $(document).on("click", ".btn-edit", function(){
             const id = $(this).data("id");
@@ -69,6 +83,22 @@ require_role('ADMIN');
                 $("#edit-estado").val(data.estado);
 
                 $("#modale").modal('show');
+            });
+        });
+        // para guardar esta cosa
+        $("#formadd").on("submit", function(e){
+            e.preventDefault();
+            $.post("../PHP/GuardarU.php", $(this).serialize(), function(resp){
+                try{ resp = JSON.parse(resp); } catch(e){ resp = {ok:false, msg:'Error al guardar'}; }
+                if(!resp.ok){
+                    showAlert('danger', resp.msg || 'Este usuario ya existe');
+                    $("#formadd")[0].reset();
+                    return;
+                }
+                $("#modalt").modal('hide');
+                showAlert('success', 'Usuario registrado correctamente');
+                $("#formadd")[0].reset();
+                cargaUsuarios();
             });
         });
 
@@ -93,13 +123,13 @@ require_role('ADMIN');
 <body>
     <div class="d-flex">
         <div class="sidebar vidrio-sidebar d-flex flex-column bg-dark" style="width: 200px; height: 100vh;">
-            <div class="textobarsup">NADA</div>
+            <img src="../imagenes/agrobitacora-logo.png" alt="AgroBitacora"></img>
             <a class="textobar" href="Admin.php">Gestionar Trabajadores</a>
             <a class="textobar" href="Gestion_Usua.php">Gestionar Usuarios</a>
             <a class="textobar" href="Gestion_Camp.php">Gestionar Campos</a>
             <a class="textobar" href="Productos.php">Configurar Valores y Productos</a>
-            <a class="textobar" href="#">Reportes Generales</a>
-            <a class="textobar" href="#">Historial de Registro</a>
+            <a class="textobar" href="Reportes.php">Reportes Generales</a>
+            <a class="textobar" href="Historial.php">Historial de Registro</a>
             <a class="a-barra-salir" href="../logins/logout.php">Cerrar Sesión</a>
         </div>
         <div class="container mt-4">
@@ -120,12 +150,13 @@ require_role('ADMIN');
                     </tr>
                 </tbody>
             </table>
+            <div id="pagination" class="d-flex justify-content-center mt-3"></div> 
             <div class="container mt-3 text-center">
                 <button class="btn pulse-effect" data-bs-toggle="modal" data-bs-target="#modalt">Añadir Usuario</button>
             </div>
             <div class="modal fade" id="modalt" tabindex="-1" aria-hidden="true">
                 <div class="modal-dialog">
-                    <div class="modal-content modal">
+                    <div class="modal-content modal-vidrio">
                         <div class="modal-header">
                             <h5 class="modal-title">Agregar Usuario</h5>
                             <button type="button" class="btn-close equis" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -158,20 +189,21 @@ require_role('ADMIN');
                             </form>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Salir</button>
-                            <button type="submit" form="formadd" class="btn btn-primary">Guardar</button>
+                            <button type="button" class="btn btn-salir" data-bs-dismiss="modal">Salir</button>
+                            <button type="submit" form="formadd" class="btn pulse-effect" data-bs-dismiss="modal">Guardar</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
+        
         <div class="modal fade" id="modale" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
+                <div class="modal-content modal-vidrio">
                     <div class="modal-header">
                         <h5 class="modal-title">Editar Usuario</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close equis" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <form id="formedit">
                         <div class="modal-body">
@@ -200,8 +232,8 @@ require_role('ADMIN');
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn btn-primary">Guardar</button>
+                            <button type="button" class="btn btn-salir" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn pulse-effect">Guardar</button>
                         </div>
                     </form>
                 </div>

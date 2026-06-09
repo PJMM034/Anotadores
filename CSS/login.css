@@ -1,14 +1,28 @@
 
 /*Diseño del cuerpo de la página*/
 body {
-    background-image: url("../imagenes/fondologin.png");
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-    background-attachment: fixed;
-    height: 100vh;
+  margin: 0;
+  min-height: 100vh;
+  
+  /* Color base por si falla el degradado */
+  background-color: #000000;
+  
+  /* El degradado radial */
+  background-image: radial-gradient(circle, #008000 0%, #000000 100%);
+  
+  
+  /* Fija el fondo al viewport (la pantalla), evitando que se mueva al hacer scroll */
+  background-attachment: fixed;
+  
+  /* Asegura que el fondo no se repita en mosaico */
+  background-repeat: no-repeat;
+  
+  /* Mantiene el degradado perfectamente centrado en la pantalla */
+  background-position: center;
+  
+  /* Color de texto legible */
+  color: white !important; 
 }
-
 /*Parte del formulario*/
 
 /*Diseño del contenedor del formulario login*/
@@ -25,37 +39,53 @@ body {
     text-align: center;
 }
 
-/*Diseño del texto del formulario*/
-.contenedorlogin .form-label {
-    color: #000000;
-    font-family: 'excalibur', cursive;
-    font-size: 18px;
+.contenedorlogin h1, .contenedorlogin label {
+    color:#fff !important;
 }
 
-.contenedorlogin .form-control {
+/* Agrupe varios elementos para darles el mismo estilo a la vez*/
+.contenedorlogin input, .contenedorlogin select, .modal-vidrio{
     background-color: rgba(178, 212, 212, 0.651);
     border: none;
     border-radius: 5px;
-    padding: 10px;
+    padding: 5px;
     font-size: 16px;
     color: #201c1c;
+    transition: background-color 0.3s ease-in-out;
+    transition: box-shadow 0.3s ease-in-out;
 }
 
-.contenedorlogin .form-control:focus {
+/*Cambiar el estilo de los inputs (donde escribes la informacion) y los selects (donde eliges la informacion en forma de lista)*/
+.contenedorlogin input:hover, .contenedorlogin select:hover {
+    background-color: rgba(181, 252, 174, 0.651);
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+    font-size: 16px;
+    color: #201c1c;
+    box-shadow: 0 0 5px rgba(181, 252, 174, 0.651);
+    transition: background-color 0.3s ease-in-out;
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+/*Cambiar el estilo de los inputs (donde escribes la informacion) y los selects (donde eliges la informacion en forma de lista)*/
+.contenedorlogin input:focus, .contenedorlogin select:focus {
     background-color: rgba(255, 255, 255, 0.651);
     border: none;
     border-radius: 5px;
-    padding: 10px;
+    padding: 5px;
     font-size: 16px;
     color: #201c1c;
-    box-shadow: 0 0 30px rgba(255, 255, 255, 0.8);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+    transition: background-color 0.3s ease-in-out;
+    transition: box-shadow 0.3s ease-in-out;
 }
 
-.contenedorlogin .textinf {
-    color: #000000;
-    font-family: 'excalibur', cursive;
-    font-size: 14px;
-    margin-top: 20px;
+/* Cambia el estilo de las opciones en forma de lista*/
+.contenedorlogin select.form-select option {
+    background-color: #2b362c; 
+    color: #ffffff;
+    padding: 10px;
 }
 
 
@@ -73,6 +103,8 @@ body {
     border-radius: 5px;
     background-color: rgba(3, 247, 255, 0.2);
     transition: background-color 0.3s ease-in-out;
+    transition: color 0.3s ease-in-out;
+    transition: box-shadow 0.3s ease-in-out;
     backdrop-filter: blur(5px);
 }
 
@@ -83,6 +115,9 @@ body {
     font-size: 16px;
     box-shadow: 0 0 20px rgb(3, 247, 255);
     padding: 10px 20px;
+    transition: background-color 0.3s ease-in-out;
+    transition: color 0.3s ease-in-out;
+    transition: box-shadow 0.3s ease-in-out;
 }
 
 /*Diseño del boton cuando se hace clic */
@@ -94,4 +129,6 @@ body {
     padding: 10px 20px;
     box-shadow: 0 0 10px rgb(255, 255, 255);
     transition: background-color 0.3s ease-in-out;
+    transition: color 0.3s ease-in-out;
+    transition: box-shadow 0.3s ease-in-out;
 }

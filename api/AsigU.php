@@ -8,9 +8,20 @@ if($id_c <= 0){
     echo json_encode(['ok' => false, 'msg' => 'Campo inválido']);
     exit;
 }
-
-//  este es para validar que anotadoe no este asignaod a un cammpo
+// la validacion que solo aparaenca solo anotador 
 if($id_u != null){
+    $roll = $Connection->prepare("SELECT id_u FROM usuarios WHERE id_u = ? AND rol = 'ANOTADOR'");
+    $roll->bind_param("i", $id_u);
+    $roll->execute();
+    $roll->store_result();
+
+    if($roll->num_rows === 0){
+        echo json_encode(['ok' => false, 'msg' => 'Anotador no encontrado']);
+        exit;
+    }
+    $roll->close();
+    //  este es para validar que anotadoe no este asignado a un cammpo
+
     $vali = $Connection->prepare("SELECT id_c FROM campos WHERE id_u = ? AND id_c != ?");
     $vali->bind_param("ii", $id_u, $id_c);
     $vali->execute();

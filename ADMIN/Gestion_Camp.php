@@ -24,23 +24,12 @@ $resultA = $Connection->query($queryA);
 
 
 <script>
-      
-      $(document).ready(function(){
-        const modaedit = new bootstrap.Modal(document.getElementById('modaedit'));
-        
-        function showAlert(type, msg) {
-                $("#alertBox").html(`
-                <div class="alert alert-${type} alert-dismissible fade show" role="alert">
-                    ${msg}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-                `);
+    
+       let paginaActual = 1;
 
-            }
-
-            
-            function cargaCampos(){
-                $.getJSON ("../api/ListC.php", function(resp){
+            function cargaCampos(pagina = 1){
+                paginaActual = pagina;
+                $.getJSON ("../api/ListC.php",{pagina:pagina} ,function(resp){
                     // Procesar los datos recibidos
                    if(!resp.ok) {
                      showAlert('danger', resp.msg || 'datos');
@@ -50,9 +39,9 @@ $resultA = $Connection->query($queryA);
                           <tr> 
                             <td>${s.id_c}</td>
                             <td>${s.nombre}</td>
+                            <td>${s.numero}</td>
                             <td>${s.nombre_producto}</td>
                             <td>${s.tipo}</td>
-                            <td>${s.numero}</td>
                             <td>${s.estado}</td>
                        
                            <td>
@@ -62,16 +51,23 @@ $resultA = $Connection->query($queryA);
                            </td>
 
                             <td class="text-end">
-                              <button class="btn btn-sm btn-outline-primary me-1 btn-edit" data-id_c="${s.id_c}" title="Editar">
+                              <a href="../PDF/GPDFRancho.php?rancho=${encodeURIComponent(s.nombre)}" target="_blank" class="btn btn-sm btn-outline-light me-1 imp" title="Imprimir">
+                                <i class="bi bi-printer"></i>
+                              </a>
+                            </td>
+
+                            <td class="text-end">
+                              <button class="btn btn-sm btn-outline-primary me-1 btn-edit edi" data-id_c="${s.id_c}" title="Editar">
                                 <i class="bi bi-pencil"></i>
                               </button>
                             </td>
+
                           </tr>
                      `);
                     //aqui se muestra la informacion de los alumnos en la tabla
                     $("#tblcampos tbody").html(row);
 
-                       $.getJSON("../api/ListU.php", function(respU){
+                       $.getJSON("../api/ListUS.php", function(respU){
                         if(!respU.ok){
                             return;
                         } 
@@ -93,9 +89,32 @@ $resultA = $Connection->query($queryA);
                             $(this).val(atual);
                         });
                     });
+                    let mmds = '<ul class="pagination">';
+                     for(let i = 1; i <= resp.total_P; i++){
+                       mmds += `<li class="page-item ${i === pagina ? 'active' : ''}">
+                                <a class="page-link paginador" href="#" onclick="cargaCampos(${i})">${i}</a>
+                            </li>`;
+                            }
+                            mmds += '</ul>';
+                            $("#pagination").html(mmds);
                      
                 });
+
             }
+      $(document).ready(function(){
+        const modaedit = new bootstrap.Modal(document.getElementById('modaedit'));
+        
+        function showAlert(type, msg) {
+                $("#alertBox").html(`
+                <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                    ${msg}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                `);
+
+            }
+
+        
              $(document).on("click",".btn-edit", function(){
                   //alert("diste click en editar");
                   //aqui se obtiene el id de para mostrarl o jalar la informaion 
@@ -130,19 +149,67 @@ $resultA = $Connection->query($queryA);
                 $(document).on("change", ".select-usuario", function(){
                     const id_c = $(this).data("id_c");
                     const id_u = $(this).val();
+                    const $select = $(this);
+                    const valorAnterior = $select.data("id_u") || "";
     
                     $.post("../api/AsigU.php", {id_c:id_c, id_u:id_u}, function(resp){
                         try{resp = JSON.parse(resp);} catch(e){resp={ok:false, msg:'Error al asignar'};}
                         if(!resp.ok) {
                         showAlert('danger', resp.msg || 'Error al asignar');
+                        $select.val(valorAnterior);
                         return;
                     }
                     showAlert('success', 'El anotador fue asignado correctamente');
+                    $select.data("id_u", id_u);
                     cargaCampos();
                     });
                 });
+ 
+
+                $("#form").on("submit", function(e){
+                e.preventDefault();
+                $.post("../PHP/GuardarC.php",$(this).serialize(), function(resp){
+                try{resp = JSON.parse(resp);} catch(e){resp={ok:false, msg:'Error al guardar'};}
+                if(!resp.ok) {
+                     showAlert('danger', resp.msg || 'Este nombre de campo ya existe');
+                     $("#form")[0].reset();
+                     return;
+                   }
+                   $("#modalt").modal('hide');
+                   showAlert('success', 'Campo registrado correctamente');
+                    $("#form")[0].reset();
+                   cargaCampos();
+                });
+            });
 
 
+             let campodata = [];
+                $.getJSON("../api/ListC.php",{ todos: 1 }, function(resp){
+                    if(!resp.ok){ showAlert('danger', resp.msg || 'Error'); return; }
+                    campodata = resp.data;
+                });
+
+                $('#nombre').on('input', function(){
+                    let q = $(this).val().toLowerCase();
+                    let lista = $('#camposList');
+                    if(!q){ lista.hide(); return; }
+
+                    let f = campodata.filter(c => c.nombre.toLowerCase().includes(q));
+                    if(!f.length){ lista.hide(); return; }
+
+                    lista.html(f.map(c => '<div class="autocomplete-item" data-nombre="' + c.nombre + '">' + c.nombre + '</div>').join('')).show();
+                });
+
+                $(document).on('click', '.autocomplete-item', function(){
+                    $('#nombre').val($(this).data('nombre'));
+                    $('#camposList').hide();
+                });
+
+                $(document).on('click', function(e){
+                    if(!$(e.target).closest('#nombre, #camposList').length)
+                        $('#camposList').hide();
+                });
+           
 
             $("#formCamp").on("submit", function(e){
                 e.preventDefault();
@@ -169,13 +236,13 @@ $resultA = $Connection->query($queryA);
     
     <div class="d-flex">
         <div class="sidebar vidrio-sidebar d-flex flex-column bg-dark" style="width: 200px; height: 100vh;">
-            <div Class="textobarsup">NADA</div>
+            <img src="../imagenes/agrobitacora-logo.png" alt="AgroBitacora"></img>
             <a class="textobar" href="Admin.php">Gestionar Trabajadores</Tr></a>
             <a class="textobar" href="Gestion_Usua.php">Gestionar Usuarios</a>
             <a class="textobar" href="Gestion_Camp.php">Gestionar Campos</a>
             <a class="textobar" href="Productos.php">Configurar Valores y Productos</a>
-            <a class="textobar" href="#">Reportes Generales</a>
-            <a class="textobar" href="#">Historial de Resgistro</a>
+            <a class="textobar" href="Reportes.php">Reportes Generales</a>
+            <a class="textobar" href="Historial.php">Historial de Resgistro</a>
             <a class="a-barra-salir" href="../logins/logout.php">Cerrar Sesión</a>
         </div>
         <div class="container mt-4">
@@ -188,11 +255,12 @@ $resultA = $Connection->query($queryA);
                     <tr>
                         <th>Id</th>
                         <th>Rancho</th>
+                        <th>Nombre del Campo</th>
                         <th>Producto</th>
                         <th>Tipo</th>
-                        <th>Número</th>
                         <th>Estado</th>
                         <th>Anotador</th>
+                        <th>Imprimir</th>
                         <th>Editar</th>
                     </tr>
                 </thead>
@@ -204,6 +272,7 @@ $resultA = $Connection->query($queryA);
                         </tr>
                     </tbody>
             </table>
+             <div id="pagination" class="d-flex justify-content-center mt-3"></div> 
             <div class="container mt-3 text-center">
                 <button class="btn pulse-effect" data-bs-toggle="modal" data-bs-target="#modalt">Añadir Campo</button>
             </div>
@@ -215,10 +284,17 @@ $resultA = $Connection->query($queryA);
                     <button type="button" class="btn-close equis" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="../PHP/GuardarC.php" method="post" id="form">
+                    <form id="form">
                         <div class="mb-3">
-                            <label for="nombre" class="form-label">Nombre del Campo</label>
-                            <input type="text" class="form-control" id="nombre" name="nombre" required placeholder="Introduce el nombre del campo">
+                                    <label class="form-label fw-semibold" for="nombre">Nombre del Rancho</label>
+                                    <input class="form-control" type="text" id="nombre" name="nombre" required placeholder="Escriba el nombre del rancho"
+                                     autocomplete="off">
+                                    <div id="camposList" class="autocomplete-items acordeon-vidrio"></div>
+
+                                </div>
+                         <div class="mb-3">
+                            <label for="numero" class="form-label">nombre del Campo</label>
+                            <input type="text" class="form-control" id="numero" name="numero" required placeholder="Introduce el nombre del campo">
                         </div>
                         <div class="md-form mb-4">
                             <label for="id_producto" class="form-label">Producto</label>
@@ -242,15 +318,11 @@ $resultA = $Connection->query($queryA);
                             <option value="cuadro">Cuadro</option>
                             </select>
                         </div>
-                         <div class="mb-3">
-                            <label for="numero" class="form-label">Número del Campo</label>
-                            <input type="text" class="form-control" id="numero" name="numero" required placeholder="Introduce el número del campo">
-                        </div>
                          <div class="md-form mb-4">
                             <label for="estado" class="form-label">Estado</label>
                             <select class="form-select" name="estado" id="estado " required>
                             <option value="Activo">Activo</option>
-                            <option value="Inativo">Inativo</option>
+                            <option value="Inactivo">Inactivo</option>
                             </select>
                         </div>
                          
@@ -259,7 +331,7 @@ $resultA = $Connection->query($queryA);
                 <div class="modal-footer">
                     <button type="button" class="btn btn-salir" data-bs-dismiss="modal">Salir</button>
                     <!-- uso el tipo submit para que envie el formulario -->
-                    <button type="submit" form="form" class="btn pulse-effect">Guardar</button>
+                    <button type="submit" form="form" class="btn pulse-effect" data-bs-dismiss="modal">Guardar</button>
                     
                 </div>
                 </div>
@@ -269,17 +341,22 @@ $resultA = $Connection->query($queryA);
 
            <div class="modal fade" id="modaedit" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog">
-                <div class="modal-content">
+                <div class="modal-content modal-vidrio">
                 <div class="modal-header">
                     <h5 class="modal-title">Editar Campo</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close equis" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form id="formCamp">
                         <input type="hidden" id="edit-id_c" name="id_c">
                         <div class="mb-3">
-                            <label for="edit-nombre" class="form-label">Nombre del Campo</label>
+                            <label for="edit-nombre" class="form-label">Nombre del Rancho</label>
                             <input type="text" class="form-control" id="edit-nombre" name="nombre" required placeholder="Introduce el nombre del campo">
+                        <div id="camposList" class="autocomplete-items acordeon-vidrio"></div>
+                        </div>
+                         <div class="mb-3">
+                            <label for="edit-numero" class="form-label">nombre del Campo</label>
+                            <input type="text" class="form-control" id="edit-numero" name="numero" required placeholder="Introduce el número del campo">
                         </div>
                         <div class="md-form mb-4">
                             <label for="edit-id_producto" class="form-label">Producto</label>
@@ -304,21 +381,17 @@ $resultA = $Connection->query($queryA);
                             <option value="cuadro">Cuadro</option>
                             </select>
                         </div>
-                         <div class="mb-3">
-                            <label for="edit-numero" class="form-label">Número del Campo</label>
-                            <input type="text" class="form-control" id="edit-numero" name="numero" required placeholder="Introduce el número del campo">
-                        </div>
                          <div class="md-form mb-4">
                             <label for="edit-estado" class="form-label">Estado</label>
                             <select class="form-select" name="estado" id="edit-estado" required>
                             <option value="Activo">Activo</option>
-                            <option value="Inativo">Inativo</option>
+                            <option value="Inactivo">Inactivo</option>
                             </select>
                         </div>
                         <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Salir</button>
+                        <button type="button" class="btn btn-salir" data-bs-dismiss="modal">Salir</button>
                         <!-- uso el tipo submit para que envie el formulario -->
-                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        <button type="submit" class="btn pulse-effect">Guardar</button>
                         
                          </div>
                     </form>

@@ -22,6 +22,40 @@ $resultA = $Connection->query($queryA);
     <script src="../js/jquery-4.0.0.js"></script>
 
 <script>
+
+    let paginaActual = 1;
+      function cargaProductos(pagina = 1){
+                $.getJSON ("../api/ListP.php", {pagina: pagina}, function(resp){
+                    // Procesar los datos recibidos
+                   if(!resp.ok) {
+                     showAlert('danger', resp.msg || 'datos');
+                     //return;
+                   }
+                        const row = resp.data.map(s =>`
+                          <tr> 
+                            <td>${s.id}</td>
+                            <td>${s.producto}</td>
+                            <td>${s.unidad}</td>
+                            <td>${s.valor}</td>
+                            <td class="text-end">
+                              <button class="btn btn-sm btn-outline-primary me-1 btn-edit edi" data-id="${s.id}" title="Editar">
+                                <i class="bi bi-pencil"></i>
+                              </button>
+                          </td>
+                          </tr>
+                     `);
+                    //aqui se muestra la informacion de los alumnos en la tabla
+                    $("#tblproducts tbody").html(row);
+                      let mmds = '<ul class="pagination">';
+                     for(let i = 1; i <= resp.total_P; i++){
+                       mmds += `<li class="page-item ${i === pagina ? 'active' : ''}">
+                                <a class="page-link paginador" href="#" onclick="cargaProductos(${i})">${i}</a>
+                            </li>`;
+                            }
+                            mmds += '</ul>';
+                            $("#pagination").html(mmds);
+                });
+            }
       
       $(document).ready(function(){
         const modale = new bootstrap.Modal(document.getElementById('modale'));
@@ -36,31 +70,7 @@ $resultA = $Connection->query($queryA);
 
             } 
 
-            function cargaProductos(){
-                $.getJSON ("../api/ListP.php", function(resp){
-                    // Procesar los datos recibidos
-                   if(!resp.ok) {
-                     showAlert('danger', resp.msg || 'datos');
-                     //return;
-                   }
-                        const row = resp.data.map(s =>`
-                          <tr> 
-                            <td>${s.id}</td>
-                            <td>${s.producto}</td>
-                            <td>${s.unidad}</td>
-                            <td>${s.valor}</td>
-                            <td class="text-end">
-                              <button class="btn btn-sm btn-outline-primary me-1 btn-edit" data-id="${s.id}" title="Editar">
-                                <i class="bi bi-pencil"></i>
-                              </button>
-                          </td>
-                          </tr>
-                     `);
-                    //aqui se muestra la informacion de los alumnos en la tabla
-                    $("#tblproducts tbody").html(row);
-                     
-                });
-            }
+          
 
              $(document).on("click",".btn-edit", function(){
                   //alert("diste click en editar");
@@ -83,6 +93,22 @@ $resultA = $Connection->query($queryA);
                     $("#modale").modal('show');
                   });
                   
+            });
+             $("#form").on("submit", function(e){
+                e.preventDefault();
+                $.post("../PHP/GuardarP.php",$(this).serialize(), function(resp){
+                try{resp = JSON.parse(resp);} catch(e){resp={ok:false, msg:'Error al guardar'};}
+                if(!resp.ok) {
+                     
+                     showAlert('danger', resp.msg || 'Este producto ya existe');
+                      $("#form")[0].reset();
+                     return;
+                   }
+                   $("#modalt").modal('hide');
+                   showAlert('success', 'Producto registrado correctamente');
+                    $("#form")[0].reset();
+                   cargaProductos();
+                });
             });
 
             $("#proform").on("submit", function(e){
@@ -107,14 +133,14 @@ $resultA = $Connection->query($queryA);
 <body>
     <div class="d-flex">
         <div class="sidebar vidrio-sidebar d-flex flex-column bg-dark" style="width: 200px; height: 100vh;">
-            <div Class="textobarsup">NADA</div>
+             <img src="../imagenes/agrobitacora-logo.png" alt="AgroBitacora"></img>
             <a class="textobar" href="Admin.php">Gestionar Trabajadores</Tr></a>
             <a class="textobar" href="Gestion_Usua.php">Gestionar Usuarios</a>
             <a class="textobar" href="Gestion_Camp.php">Gestionar Campos</a>
             <a class="textobar" href="Productos.php">Configurar Valores y Productos</a>
-            <a class="textobar" href="#">Reportes Generales</a>
-            <a class="textobar" href="#">Historial de Resgistro</a>
-            <a class="a-barra-salir" href="../logins/logout.php">Salir</a> 
+            <a class="textobar" href="Reportes.php">Reportes Generales</a>
+            <a class="textobar" href="Historial.php">Historial de Resgistro</a>
+            <a class="a-barra-salir" href="../logins/logout.php">Cerrar Sesión</a> 
         </div>
         <div class="container mt-4">
             <!-- la tabla de los trabajadores -->
@@ -139,6 +165,7 @@ $resultA = $Connection->query($queryA);
                         </tr>
                     </tbody>
             </table>
+             <div id="pagination" class="d-flex justify-content-center mt-3"></div> 
             <div class="container mt-3 text-center">
                 <button class="btn pulse-effect" data-bs-toggle="modal" data-bs-target="#modalt">Añadir Producto</button>
             </div>
@@ -150,7 +177,7 @@ $resultA = $Connection->query($queryA);
                     <button type="button" class="btn-close equis" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="../PHP/GuardarP.php" method="post" id="form">
+                    <form id="form">
                         <div class="mb-3">
                             <label for="producto" class="form-label">Nombre del Producto</label>
                             <input type="text" class="form-control" id="producto" name="producto" required placeholder="Introduce el producto">
@@ -174,7 +201,7 @@ $resultA = $Connection->query($queryA);
                 <div class="modal-footer">
                     <button type="button" class="btn btn-salir" data-bs-dismiss="modal">Salir</button>
                     <!-- uso el tipo submit para que envie el formulario -->
-                    <button type="submit" form="form" class="btn pulse-effect">Guardar</button>
+                    <button type="submit" form="form" class="btn pulse-effect" data-bs-dismiss="modal">Guardar</button>
                     
                 </div>
                 </div>
@@ -182,12 +209,12 @@ $resultA = $Connection->query($queryA);
             </div>
         </div>
         
-            <div class="modal fade" id="modale" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
+            <div class="modal fade" id="modale" tabindex="-1" aria-labelledby="modale" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content modal-vidrio">
                         <div class="modal-header">
                             <h5 class="modal-title">Editar Producto</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" class="equis btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <form id="proform">
                             <div class="modal-body">
@@ -212,8 +239,8 @@ $resultA = $Connection->query($queryA);
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                <button type="submit" class="btn btn-primary">Guardar</button>
+                                <button type="button" class="btn btn-salir" data-bs-dismiss="modal">Cancelar</button>
+                                <button type="submit" class="btn pulse-effect">Guardar</button>
                             </div>
                         </form>
                     </div>
